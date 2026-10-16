@@ -180,6 +180,17 @@
     .product-wordmark b { color: #315ec1; }
     .wordmark-dot { width: 6px; height: 6px; border-radius: 50%; background: linear-gradient(135deg,#3b82f6,#8b5cf6); }
 
+    .company-video { position: relative; overflow: hidden; background: linear-gradient(180deg,#F5F7FA 0%,#EAF4FC 100%); }
+    .company-video::before { content: ""; position: absolute; width: 480px; height: 480px; left: -180px; top: -250px; border-radius: 50%; background: rgba(92,200,215,.14); filter: blur(70px); pointer-events: none; }
+    .company-video-head { position: relative; max-width: 760px; margin: 0 auto 38px; text-align: center; }
+    .company-video-head .section-kicker { justify-content: center; }
+    .company-video-head .section-kicker::before { display: none; }
+    .company-video-head .section-title, .company-video-head .section-desc { margin-inline: auto; }
+    .company-video-frame { position: relative; width: min(960px,100%); margin-inline: auto; padding: 10px; border: 1px solid rgba(255,255,255,.92); border-radius: 26px; background: rgba(255,255,255,.74); box-shadow: 0 24px 70px rgba(0,61,145,.14), 0 0 0 8px rgba(0,167,181,.05); backdrop-filter: blur(12px); }
+    .company-video-frame::before { content: ""; position: absolute; inset: 10px; z-index: 0; border-radius: 18px; background: linear-gradient(135deg,#005BAC,#00A7B5); opacity: .13; pointer-events: none; }
+    .company-video-frame iframe { position: relative; z-index: 1; display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 18px; background: #D9E2EC; }
+    .company-video-caption { position: relative; margin: 18px auto 0; color: #64748B; font-size: .78rem; line-height: 1.7; text-align: center; }
+
     /* General sections */
     .about { position: relative; overflow: hidden; background: #fff; }
     .about::before { content: ""; position: absolute; width: 430px; height: 430px; right: -220px; top: 100px; border-radius: 50%; background: rgba(224,234,255,.42); filter: blur(60px); pointer-events: none; }
@@ -224,7 +235,6 @@
     .showcase-group-title { display: flex; align-items: center; gap: 13px; margin: 0 0 20px; color: #1F2937; font-size: 1.2rem; font-weight: 820; }
     .showcase-group-title::before { content: ""; width: 5px; height: 25px; border-radius: 5px; background: #00A7B5; }
     .showcase-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 17px; }
-    .showcase-group:last-of-type .showcase-grid { grid-template-columns: repeat(4,minmax(0,1fr)); gap: 16px; }
     .showcase-card { overflow: hidden; border: 1px solid #D9E2EC; border-radius: 18px; background: #fff; box-shadow: 0 9px 26px rgba(31,41,55,.06); transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease; }
     .showcase-card:hover { transform: translateY(-5px); border-color: #5CC8D7; box-shadow: 0 18px 36px rgba(0,91,172,.12); }
     .showcase-card a { display: block; }
@@ -233,6 +243,25 @@
     .showcase-caption { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 16px 16px; }
     .showcase-caption strong { color: #1F2937; font-size: .88rem; font-weight: 800; }
     .showcase-caption span { color: #005BAC; font-size: .7rem; font-weight: 750; white-space: nowrap; }
+    .lightbox { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: clamp(18px,4vw,48px); background: rgba(15,29,50,.78); opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility .25s ease; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+    .lightbox.is-open { opacity: 1; visibility: visible; }
+    .lightbox-dialog { position: relative; display: flex; width: min(1120px,100%); max-height: min(92vh,900px); flex-direction: column; overflow: hidden; border: 1px solid rgba(255,255,255,.28); border-radius: 24px; background: #fff; box-shadow: 0 30px 90px rgba(0,0,0,.32); transform: translateY(15px) scale(.98); transition: transform .3s cubic-bezier(.2,.7,.2,1); }
+    .lightbox.is-open .lightbox-dialog { transform: translateY(0) scale(1); }
+    .lightbox-top { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 15px 18px 14px 22px; border-bottom: 1px solid #e7edf5; background: #fff; }
+    .lightbox-meta { min-width: 0; }
+    .lightbox-kicker { display: block; color: #00A7B5; font-size: .65rem; font-weight: 850; letter-spacing: .14em; text-transform: uppercase; }
+    .lightbox-title { display: block; overflow: hidden; margin-top: 4px; color: #1F2937; font-size: .95rem; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+    .lightbox-close, .lightbox-nav { display: grid; place-items: center; flex: none; border: 1px solid #dce6f3; color: #355679; background: #fff; cursor: pointer; transition: color .2s ease, border-color .2s ease, background .2s ease, transform .2s ease; }
+    .lightbox-close { width: 38px; height: 38px; border-radius: 12px; font-size: 1.05rem; }
+    .lightbox-close:hover, .lightbox-nav:hover { border-color: #5CC8D7; color: #005BAC; background: #F5F7FA; transform: translateY(-2px); }
+    .lightbox-stage { position: relative; display: grid; min-height: 0; flex: 1; place-items: center; padding: clamp(18px,3vw,36px); background: linear-gradient(145deg,#F5F7FA,#EAF4FC); }
+    .lightbox-image { display: block; width: auto; max-width: calc(100% - 96px); height: auto; max-height: 70vh; object-fit: contain; border-radius: 10px; box-shadow: 0 16px 40px rgba(31,41,55,.16); }
+    .lightbox-nav { position: absolute; top: 50%; width: 42px; height: 42px; border-radius: 50%; font-size: 1rem; transform: translateY(-50%); }
+    .lightbox-nav:hover { transform: translateY(-50%) scale(1.04); }
+    .lightbox-prev { left: 18px; }
+    .lightbox-next { right: 18px; }
+    .lightbox-bottom { display: flex; align-items: center; justify-content: center; padding: 11px 18px; color: #64748B; background: #fff; font-size: .72rem; }
+    body.lightbox-open { overflow: hidden; }
     .text-link { display: inline-flex; align-items: center; gap: 8px; color: #2d5fc6; font-size: .81rem; font-weight: 800; transition: gap .2s ease; }
     .text-link:hover { gap: 12px; }
     .product-visual { position: relative; align-self: center; justify-self: end; width: 155px; height: 195px; display: grid; place-items: center; }
@@ -365,6 +394,36 @@
     .contact-shell { position: relative; display: grid; grid-template-columns: 1.15fr .85fr; gap: 50px; align-items: center; padding: clamp(30px,5vw,60px); border: 1px solid rgba(213,225,246,.9); border-radius: 28px; background: rgba(255,255,255,.74); box-shadow: 0 24px 70px rgba(56,79,132,.09); backdrop-filter: blur(16px); }
     .contact h2 { max-width: 590px; margin: 18px 0 17px; color: #172b49; font-size: clamp(2rem,4vw,3.15rem); font-weight: 820; line-height: 1.3; letter-spacing: -.05em; }
     .contact-copy { max-width: 540px; margin: 0; color: #687891; font-size: .98rem; line-height: 1.95; }
+    .contact-info { display: grid; gap: 9px; margin-top: 28px; padding: 20px 21px; border: 1px solid #D9E2EC; border-radius: 17px; background: rgba(255,255,255,.72); }
+    .contact-info-title { margin: 0 0 3px; color: #1F2937; font-size: .98rem; font-weight: 850; }
+    .contact-info-item { display: flex; align-items: flex-start; gap: 10px; color: #64748B; font-size: .82rem; line-height: 1.7; }
+    .contact-info-item i { width: 17px; margin-top: 4px; color: #005BAC; text-align: center; }
+    .contact-info-item a { color: #005BAC; font-weight: 700; }
+    .contact-form { display: grid; gap: 15px; margin-top: 27px; }
+    .contact-form-title { margin: 0; color: #1F2937; font-size: 1.1rem; font-weight: 850; }
+    .contact-form-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 13px; }
+    .contact-field { display: grid; gap: 7px; }
+    .contact-field.full { grid-column: 1 / -1; }
+    .contact-field label { color: #405674; font-size: .78rem; font-weight: 750; }
+    .contact-products { min-width: 0; margin: 0; padding: 0; border: 0; }
+    .contact-products legend { margin-bottom: 7px; color: #405674; font-size: .78rem; font-weight: 750; }
+    .contact-field input, .contact-field select, .contact-field textarea { width: 100%; border: 1px solid #D9E2EC; border-radius: 11px; padding: 11px 12px; color: #1F2937; background: rgba(255,255,255,.86); font-size: .82rem; outline: none; transition: border-color .2s ease, box-shadow .2s ease; }
+    .contact-field textarea { min-height: 105px; resize: vertical; }
+    .contact-field input:focus, .contact-field select:focus, .contact-field textarea:focus { border-color: #00A7B5; box-shadow: 0 0 0 4px rgba(0,167,181,.11); }
+    .contact-checks { display: flex; flex-wrap: wrap; gap: 8px 14px; }
+    .contact-check { display: inline-flex; align-items: center; gap: 7px; color: #64748B; font-size: .78rem; cursor: pointer; }
+    .contact-check input { width: 15px; height: 15px; accent-color: #005BAC; }
+    .contact-form-submit { justify-self: start; margin-top: 2px; }
+    .contact-form-note { margin: -4px 0 0; color: #8492A6; font-size: .7rem; line-height: 1.6; }
+    .contact-form-note.is-error { color: #b42318; }
+    .contact-form-submit:disabled { opacity: .62; cursor: wait; transform: none; }
+    #contact-form { scroll-margin-top: calc(var(--nav-height) + 24px); }
+    .contact-success { width: min(440px,calc(100% - 32px)); max-width: none; margin: auto; padding: 34px 30px 30px; border: 1px solid #D9E2EC; border-radius: 24px; color: #1F2937; background: linear-gradient(155deg,#fff,#F5F7FA); box-shadow: 0 30px 85px rgba(0,37,78,.26); text-align: center; }
+    .contact-success::backdrop { background: rgba(15,29,50,.62); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+    .contact-success-icon { display: grid; place-items: center; width: 58px; height: 58px; margin: 0 auto 18px; border-radius: 19px; color: #fff; background: linear-gradient(135deg,#005BAC,#00A7B5); box-shadow: 0 10px 26px rgba(0,91,172,.2); font-size: 1.35rem; }
+    .contact-success h2 { margin: 0; color: #0A3D91; font-size: 1.22rem; line-height: 1.5; }
+    .contact-success p { margin: 11px 0 22px; color: #64748B; font-size: .86rem; line-height: 1.8; }
+    .contact-success .btn { width: 100%; }
     .contact-aside { padding: 26px; border: 1px solid #e3eaf7; border-radius: 20px; background: rgba(255,255,255,.79); }
     .contact-aside-top { display: flex; align-items: center; gap: 13px; padding-bottom: 22px; border-bottom: 1px solid #e9eef6; }
     .contact-round-icon { display: grid; place-items: center; width: 45px; height: 45px; border-radius: 14px; color: #fff; background: linear-gradient(135deg,#3477eb,#7957e7); box-shadow: 0 8px 18px rgba(65,95,209,.19); }
@@ -386,6 +445,7 @@
     .contact-form-link { display: inline-flex; align-items: center; flex: none; gap: 7px; color: #2d5fca; font-size: .77rem; font-weight: 800; white-space: nowrap; }
     .contact-form-link:hover { text-decoration: underline; text-underline-offset: 4px; }
     .contact .btn { margin-top: 25px; }
+    .contact .contact-form-submit { margin-top: 2px; }
 
     /* Brand palette application: 60% neutral / 25% primary / 10% teal / 5% green */
     .hero { background: radial-gradient(ellipse at 74% 16%, rgba(92,200,215,.18), transparent 37%), radial-gradient(ellipse at 92% 75%, rgba(0,167,181,.12), transparent 36%), linear-gradient(180deg,#fff 0%,#F5F7FA 100%); }
@@ -485,7 +545,6 @@
       .section-head-row, .services-top { align-items: start; flex-direction: column; gap: 17px; }
       .section-head-row .section-desc, .services-top .section-desc { max-width: 650px; }
       .showcase-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
-      .showcase-group:last-of-type .showcase-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
       .product-card { grid-template-columns: minmax(0,1fr) 155px; }
       .product-visual { transform: none; margin-left: 0; }
       .advantages-layout { gap: 45px; }
@@ -545,13 +604,26 @@
       .product-wordmark { font-size: .78rem; }
       .section-title { margin-top: 14px; font-size: clamp(1.8rem,8vw,2.55rem); }
       .section-desc { margin-top: 15px; font-size: .94rem; line-height: 1.85; }
+      .company-video-head { margin-bottom: 27px; }
+      .company-video-frame { padding: 6px; border-radius: 19px; box-shadow: 0 18px 42px rgba(0,61,145,.12), 0 0 0 5px rgba(0,167,181,.05); }
+      .company-video-frame::before { inset: 6px; border-radius: 14px; }
+      .company-video-frame iframe { border-radius: 14px; }
+      .company-video-caption { margin-top: 13px; font-size: .72rem; }
       .showcase-head { margin-bottom: 30px; }
       .showcase-group { margin-top: 38px; }
       .showcase-group-title { font-size: 1.05rem; }
       .showcase-grid { grid-template-columns: 1fr; gap: 12px; }
-      .showcase-group:last-of-type .showcase-grid { grid-template-columns: 1fr; }
       .showcase-caption { padding: 12px 14px 14px; }
       .showcase-caption strong { font-size: .82rem; }
+      .lightbox { padding: 10px; }
+      .lightbox-dialog { max-height: 94vh; border-radius: 18px; }
+      .lightbox-top { padding: 13px 13px 12px 16px; }
+      .lightbox-title { font-size: .84rem; }
+      .lightbox-stage { padding: 16px 10px; }
+      .lightbox-image { max-width: calc(100% - 54px); max-height: 68vh; }
+      .lightbox-nav { width: 34px; height: 34px; }
+      .lightbox-prev { left: 8px; }
+      .lightbox-next { right: 8px; }
       .about-grid { gap: 39px; }
       .about-manifesto { margin-top: 24px; padding: 19px; font-size: .89rem; }
       .about-years strong { font-size: 3.8rem; }
@@ -606,6 +678,10 @@
       .contact-shell { gap: 27px; padding: 24px 19px; border-radius: 21px; }
       .contact h2 { font-size: clamp(1.85rem,8vw,2.5rem); }
       .contact-copy { font-size: .9rem; }
+      .contact-info { padding: 17px 16px; }
+      .contact-form-grid { grid-template-columns: 1fr; }
+      .contact-field.full { grid-column: auto; }
+      .contact-form-submit { width: 100%; }
       .contact-aside { padding: 19px; border-radius: 16px; }
       .contact-aside-top { gap: 10px; }
       .contact-round-icon { width: 40px; height: 40px; }
@@ -709,7 +785,22 @@
       </div>
     </section>
 
-    <!-- 02 / About -->
+    <!-- 02 / Company introduction video -->
+    <section class="company-video section-pad" id="company-video" aria-labelledby="company-video-title">
+      <div class="container-wide">
+        <div class="company-video-head reveal">
+          <span class="section-kicker">Company Introduction</span>
+          <h2 class="section-title" id="company-video-title">讓技術落地，<br class="hidden sm:block">從理解企業開始。</h2>
+          <p class="section-desc">透過影片認識狀態網際網路如何以企業資訊系統、流程設計與技術整合，陪伴組織推動數位轉型。</p>
+        </div>
+        <div class="company-video-frame reveal reveal-delay-1">
+          <iframe src="https://www.youtube-nocookie.com/embed/7myMjzIL3SE" title="狀態網際網路公司介紹影片" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+          <p class="company-video-caption">觀看公司介紹影片，了解我們如何串聯流程、資訊與組織協作。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 / About -->
     <section class="about section-pad" id="about" aria-labelledby="about-title">
       <div class="container-wide about-grid">
         <div class="about-left reveal">
@@ -763,15 +854,6 @@
           </div>
         </div>
 
-        <div class="showcase-group">
-          <h3 class="showcase-group-title">產業案例應用情境</h3>
-          <div class="showcase-grid">
-            <article class="showcase-card tall reveal"><a href="作品集/1營建業.png" target="_blank" rel="noopener noreferrer"><img src="作品集/1營建業.png" alt="營建業應用情境示意圖" loading="lazy"><div class="showcase-caption"><strong>營建業｜跨工地採購與進度推進</strong><span>案例 ↗</span></div></a></article>
-            <article class="showcase-card tall reveal reveal-delay-1"><a href="作品集/2製造業.png" target="_blank" rel="noopener noreferrer"><img src="作品集/2製造業.png" alt="製造業應用情境示意圖" loading="lazy"><div class="showcase-caption"><strong>製造業｜品質異常與風險預測</strong><span>案例 ↗</span></div></a></article>
-            <article class="showcase-card tall reveal reveal-delay-2"><a href="作品集/3洗衣業.png" target="_blank" rel="noopener noreferrer"><img src="作品集/3洗衣業.png" alt="洗衣業應用情境示意圖" loading="lazy"><div class="showcase-caption"><strong>洗衣業｜收件到客訴回應</strong><span>案例 ↗</span></div></a></article>
-            <article class="showcase-card tall reveal"><a href="作品集/4食品加工製造業.png" target="_blank" rel="noopener noreferrer"><img src="作品集/4食品加工製造業.png" alt="食品加工製造業應用情境示意圖" loading="lazy"><div class="showcase-caption"><strong>食品加工製造業｜原料異常與流程優化</strong><span>案例 ↗</span></div></a></article>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -853,8 +935,39 @@
     <section class="contact" id="contact" aria-labelledby="contact-title">
       <div class="container-wide">
         <div class="contact-shell reveal">
-          <div><span class="section-kicker">Start a Conversation</span><h2 id="contact-title">從實際需求出發，找到合適的數位化方向。</h2><p class="contact-copy">無論正在評估流程管理、系統導入、帳號整合或外部系統串接，都歡迎預約交流。從現況與需求開始，進一步討論適合的產品應用與技術方向。</p><a class="btn btn-primary" href="https://calendar.app.google/7YEFEk9GmYYzGcev8" target="_blank" rel="noopener noreferrer">預約技術諮詢 <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="btn-status">Status: Ready to Connect</span></a></div>
-          <aside class="contact-aside"><div class="contact-aside-top"><span class="contact-round-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><strong>與我們討論您的需求</strong><span>Technical Consultation</span></div></div><div class="contact-detail"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>透過預約頁面選擇方便的時段，安排技術需求交流。</span></div><div class="contact-detail"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s7-4.5 7-11a7 7 0 1 0-14 0c0 6.5 7 11 7 11Z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="10" r="2.2" stroke="currentColor" stroke-width="1.6"/></svg><span>可討論產品應用、流程設計、帳號整合及系統串接等議題。</span></div><div class="contact-socials" aria-label="社群連結"><a class="contact-social-link line" href="https://line.me/R/ti/p/%40qgl8779e" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-line" aria-hidden="true"></i><span>LINE</span></a><a class="contact-social-link facebook" href="https://www.facebook.com/StatusTW/" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i><span>Facebook</span></a><a class="contact-social-link youtube" href="https://www.youtube.com/channel/UChrAnjSOzI1oBAAsj5dlG5Q" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-youtube" aria-hidden="true"></i><span>YouTube</span></a></div><div class="contact-form-cta"><div><strong>想更完整說明您的需求？</strong><span>填寫表單，讓我們提前了解您的需求。</span></div><a class="contact-form-link" href="https://forms.gle/5FV9Bydr3ZxSXgj68" target="_blank" rel="noopener noreferrer">填寫需求表單 <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a></div><a class="btn btn-secondary" style="width:100%;margin-top:20px" href="https://calendar.app.google/7YEFEk9GmYYzGcev8" target="_blank" rel="noopener noreferrer">開啟預約頁面 <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></aside>
+          <div>
+            <span class="section-kicker">Start a Conversation</span>
+            <h2 id="contact-title">從實際需求出發，找到合適的數位化方向。</h2>
+            <p class="contact-copy">無論正在評估流程管理、系統導入、帳號整合或外部系統串接，都歡迎預約交流。從現況與需求開始，進一步討論適合的產品應用與技術方向。</p>
+            <div class="contact-info">
+              <h3 class="contact-info-title">與我們取得聯繫</h3>
+              <div class="contact-info-item"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span>聯絡信箱：<a href="mailto:smd@status.com.tw">smd@status.com.tw</a></span></div>
+              <div class="contact-info-item"><i class="fa-solid fa-phone" aria-hidden="true"></i><span>電話：<a href="tel:+886227488866">(02) 2748-8866</a></span></div>
+              <div class="contact-info-item"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span>地址：10563 台北市松山區光復南路 67 號 6 樓</span></div>
+              <div class="contact-info-item"><i class="fa-solid fa-building" aria-hidden="true"></i><span>統編：97321598</span></div>
+            </div>
+            <form class="contact-form" id="contact-form" action="https://docs.google.com/forms/d/e/1FAIpQLSfAYz3BNCfocnOA_0n2XxonTWQWXwayaBr6AvJavntcH5xD9A/formResponse" method="post" target="contact-form-frame">
+              <h3 class="contact-form-title">聯絡我們</h3>
+              <div class="contact-form-grid">
+                <div class="contact-field"><label for="contact-name">您的姓名／稱呼</label><input id="contact-name" name="entry.588998168" type="text" autocomplete="name" required></div>
+                <div class="contact-field"><label for="contact-email">聯絡電子信箱</label><input id="contact-email" name="entry.476214014" type="email" autocomplete="email" required></div>
+                <fieldset class="contact-field full contact-products"><legend>您的需求</legend><div class="contact-checks"><label class="contact-check"><input type="checkbox" value="PowerBPM">PowerBPM</label><label class="contact-check"><input type="checkbox" value="PowerEIP">PowerEIP</label><label class="contact-check"><input type="checkbox" value="PowerISO">PowerISO</label></div><input id="contact-products-value" name="entry.1610329698" type="hidden"></fieldset>
+                <div class="contact-field full"><label for="contact-message">需求簡介</label><textarea id="contact-message" name="entry.1646642689" placeholder="請簡要描述您的需求、目前遇到的問題或希望討論的方向。" required></textarea></div>
+                <div class="contact-field"><label for="contact-time">適合聯絡的時間</label><select id="contact-time" name="entry.1091995575" required><option value="">請選擇時段</option><option>週一至週五 9:00-12:00</option><option>週一至週五 13:00-18:00</option><option>週一至週五 9:00-18:00</option></select></div>
+              </div>
+              <button class="btn btn-primary contact-form-submit" type="submit">送出需求 <i class="fa-solid fa-paper-plane" aria-hidden="true"></i></button>
+              <p class="contact-form-note" id="contact-form-status" role="status" aria-live="polite">填寫後可直接在此頁送出需求。</p>
+            </form>
+            <a class="btn btn-secondary" href="https://calendar.app.google/7YEFEk9GmYYzGcev8" target="_blank" rel="noopener noreferrer">預約技術諮詢 <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="btn-status">Status: Ready to Connect</span></a>
+          </div>
+          <aside class="contact-aside">
+            <div class="contact-aside-top"><span class="contact-round-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><strong>與我們討論您的需求</strong><span>Technical Consultation</span></div></div>
+            <div class="contact-detail"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>透過預約頁面選擇方便的時段，安排技術需求交流。</span></div>
+            <div class="contact-detail"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s7-4.5 7-11a7 7 0 1 0-14 0c0 6.5 7 11 7 11Z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="10" r="2.2" stroke="currentColor" stroke-width="1.6"/></svg><span>可討論產品應用、流程設計、帳號整合及系統串接等議題。</span></div>
+            <div class="contact-socials" aria-label="社群連結"><a class="contact-social-link line" href="https://line.me/R/ti/p/%40qgl8779e" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-line" aria-hidden="true"></i><span>LINE</span></a><a class="contact-social-link facebook" href="https://www.facebook.com/StatusTW/" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i><span>Facebook</span></a><a class="contact-social-link youtube" href="https://www.youtube.com/channel/UChrAnjSOzI1oBAAsj5dlG5Q" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-youtube" aria-hidden="true"></i><span>YouTube</span></a></div>
+            <div class="contact-form-cta"><div><strong>想更完整說明您的需求？</strong><span>填寫表單，讓我們提前了解您的需求。</span></div><a class="contact-form-link" href="#contact-form">填寫需求表單 <i class="fa-solid fa-arrow-down" aria-hidden="true"></i></a></div>
+            <a class="btn btn-secondary" style="width:100%;margin-top:20px" href="https://calendar.app.google/7YEFEk9GmYYzGcev8" target="_blank" rel="noopener noreferrer">開啟預約頁面 <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </aside>
         </div>
       </div>
     </section>
@@ -869,6 +982,29 @@
     <div class="container-wide footer-bottom"><span>© <span id="current-year">2026</span> 狀態網際網路股份有限公司. All rights reserved.</span><a class="back-top" href="#home">返回頁首 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
   </footer>
 
+  <iframe id="contact-form-frame" name="contact-form-frame" title="聯絡表單提交結果" hidden></iframe>
+  <dialog class="contact-success" id="contact-success" aria-labelledby="contact-success-title">
+    <div class="contact-success-icon" aria-hidden="true"><i class="fa-solid fa-check"></i></div>
+    <h2 id="contact-success-title">需求已送出，我們將盡快與您聯絡！</h2>
+    <p>感謝您的來訊，請留意您提供的聯絡信箱。</p>
+    <button class="btn btn-primary" id="contact-success-close" type="button">完成</button>
+  </dialog>
+
+  <div class="lightbox" id="showcase-lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" aria-hidden="true">
+    <div class="lightbox-dialog">
+      <div class="lightbox-top">
+        <div class="lightbox-meta"><span class="lightbox-kicker" id="lightbox-kicker">Portfolio Showcase</span><strong class="lightbox-title" id="lightbox-title"></strong></div>
+        <button class="lightbox-close" id="lightbox-close" type="button" aria-label="關閉圖片預覽"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+      </div>
+      <div class="lightbox-stage">
+        <button class="lightbox-nav lightbox-prev" id="lightbox-prev" type="button" aria-label="上一張"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+        <img class="lightbox-image" id="lightbox-image" src="" alt="">
+        <button class="lightbox-nav lightbox-next" id="lightbox-next" type="button" aria-label="下一張"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <div class="lightbox-bottom"><span id="lightbox-counter"></span></div>
+    </div>
+  </div>
+
   <script>
     (() => {
       'use strict';
@@ -880,6 +1016,124 @@
       const typedHeadline = document.getElementById('typed-headline');
       const typingCaret = document.getElementById('typing-caret');
       const headlineText = '讓技術落地，讓轉型真正發生';
+
+      // Portfolio lightbox: keeps image viewing in-page with keyboard and touch-friendly controls.
+      const lightbox = document.getElementById('showcase-lightbox');
+      const lightboxImage = document.getElementById('lightbox-image');
+      const lightboxTitle = document.getElementById('lightbox-title');
+      const lightboxKicker = document.getElementById('lightbox-kicker');
+      const lightboxCounter = document.getElementById('lightbox-counter');
+      const lightboxClose = document.getElementById('lightbox-close');
+      const lightboxPrev = document.getElementById('lightbox-prev');
+      const lightboxNext = document.getElementById('lightbox-next');
+      const showcaseItems = Array.from(document.querySelectorAll('.showcase-card a'));
+      let lightboxIndex = 0;
+      let lightboxLastFocus = null;
+      const updateLightbox = () => {
+        const item = showcaseItems[lightboxIndex];
+        if (!item) return;
+        const image = item.querySelector('img');
+        const caption = item.querySelector('.showcase-caption strong');
+        const groupTitle = item.closest('.showcase-group')?.querySelector('.showcase-group-title');
+        lightboxImage.src = image.currentSrc || image.src;
+        lightboxImage.alt = image.alt || '';
+        lightboxTitle.textContent = caption?.textContent || image.alt || '圖片預覽';
+        lightboxKicker.textContent = groupTitle?.textContent || 'Portfolio Showcase';
+        lightboxCounter.textContent = `${lightboxIndex + 1} / ${showcaseItems.length}`;
+      };
+      const openLightbox = (index) => {
+        lightboxIndex = index;
+        lightboxLastFocus = document.activeElement;
+        updateLightbox();
+        lightbox.classList.add('is-open');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('lightbox-open');
+        lightboxClose.focus();
+      };
+      const closeLightbox = () => {
+        lightbox.classList.remove('is-open');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('lightbox-open');
+        lightboxImage.src = '';
+        if (lightboxLastFocus) lightboxLastFocus.focus();
+      };
+      const moveLightbox = (step) => {
+        lightboxIndex = (lightboxIndex + step + showcaseItems.length) % showcaseItems.length;
+        updateLightbox();
+      };
+      showcaseItems.forEach((item, index) => item.addEventListener('click', (event) => {
+        event.preventDefault();
+        openLightbox(index);
+      }));
+      lightboxClose.addEventListener('click', closeLightbox);
+      lightboxPrev.addEventListener('click', () => moveLightbox(-1));
+      lightboxNext.addEventListener('click', () => moveLightbox(1));
+      lightbox.addEventListener('click', (event) => {
+        if (event.target === lightbox) closeLightbox();
+      });
+      document.addEventListener('keydown', (event) => {
+        if (!lightbox.classList.contains('is-open')) return;
+        if (event.key === 'Escape') closeLightbox();
+        if (event.key === 'ArrowLeft') moveLightbox(-1);
+        if (event.key === 'ArrowRight') moveLightbox(1);
+      });
+
+      const contactForm = document.getElementById('contact-form');
+      if (contactForm) {
+        const contactFrame = document.getElementById('contact-form-frame');
+        const productValue = document.getElementById('contact-products-value');
+        const formStatus = document.getElementById('contact-form-status');
+        const submitButton = contactForm.querySelector('[type="submit"]');
+        const successDialog = document.getElementById('contact-success');
+        let submitting = false;
+        let submitTimeout;
+
+        contactForm.addEventListener('submit', (event) => {
+          if (submitting) {
+            event.preventDefault();
+            return;
+          }
+          const selectedProducts = Array.from(contactForm.querySelectorAll('.contact-check input:checked'));
+          if (!selectedProducts.length) {
+            event.preventDefault();
+            formStatus.textContent = '請至少選擇一項需求。';
+            formStatus.classList.add('is-error');
+            contactForm.querySelector('.contact-check input').focus();
+            return;
+          }
+          productValue.value = selectedProducts.map((input) => input.value).join('、');
+          submitting = true;
+          submitButton.disabled = true;
+          contactForm.setAttribute('aria-busy', 'true');
+          formStatus.classList.remove('is-error');
+          formStatus.textContent = '正在送出，請稍候…';
+          submitTimeout = window.setTimeout(() => {
+            if (!submitting) return;
+            submitting = false;
+            submitButton.disabled = false;
+            contactForm.removeAttribute('aria-busy');
+            formStatus.textContent = '送出逾時，請確認網路連線後再試，或直接來電聯絡。';
+            formStatus.classList.add('is-error');
+          }, 25000);
+        });
+
+        contactFrame.addEventListener('load', () => {
+          if (!submitting) return;
+          try {
+            if (contactFrame.contentWindow.location.href === 'about:blank') return;
+          } catch (_) { /* The Google response is on another origin. */ }
+          window.clearTimeout(submitTimeout);
+          submitting = false;
+          submitButton.disabled = false;
+          contactForm.removeAttribute('aria-busy');
+          contactForm.reset();
+          productValue.value = '';
+          formStatus.textContent = '填寫後可直接在此頁送出需求。';
+          successDialog.showModal();
+        });
+
+        document.getElementById('contact-success-close').addEventListener('click', () => successDialog.close());
+      }
 
       // Keep a fixed text-only H1 for SEO and assistive technology; animate its visual counterpart once.
       if (!reducedMotion && typedHeadline) {
