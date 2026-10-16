@@ -1,0 +1,939 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <meta name="description" content="狀態網際網路專注企業資訊系統研發與應用，以 PowerBPM、PowerEIP、PowerISO、PowerHR 及系統顧問、流程設計與技術整合服務，協助企業推動管理數位化。">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="狀態網際網路｜讓技術落地，讓轉型真正發生">
+  <meta property="og:description" content="以企業管理系統、流程設計與技術整合，串聯企業流程、資訊與協作。">
+  <title>狀態網際網路｜讓技術落地，讓轉型真正發生</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            status: { blue: '#005BAC', violet: '#0A3D91', mint: '#7AC143', ink: '#1F2937', muted: '#64748B', mist: '#F5F7FA' }
+          },
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans TC', 'Microsoft JhengHei', 'sans-serif']
+          },
+          boxShadow: {
+            soft: '0 18px 60px rgba(34, 71, 128, .09)',
+            card: '0 12px 36px rgba(26, 55, 100, .07)'
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    :root {
+      --blue: #005BAC;
+      --violet: #0A3D91;
+      --teal: #00A7B5;
+      --cyan: #5CC8D7;
+      --mint: #7AC143;
+      --ink: #1F2937;
+      --muted: #64748B;
+      --line: #D9E2EC;
+      --mist: #F5F7FA;
+      --nav-height: 76px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-height) + 18px); }
+    body { margin: 0; color: var(--ink); background: #fff; font-family: Inter, "Noto Sans TC", "Microsoft JhengHei", sans-serif; -webkit-font-smoothing: antialiased; }
+    body.menu-open { overflow: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { font: inherit; }
+    ::selection { color: #fff; background: #5378ec; }
+    :focus-visible { outline: 3px solid rgba(37,99,235,.65); outline-offset: 4px; border-radius: 8px; }
+    .container-wide { width: min(1160px, calc(100% - 48px)); margin-inline: auto; }
+    .section-pad { padding-block: 112px; }
+    .section-kicker { display: inline-flex; align-items: center; gap: 9px; color: var(--blue); font-size: .75rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    .section-kicker::before { content: ""; width: 22px; height: 1px; background: currentColor; }
+    .section-title { margin-top: 18px; max-width: 760px; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.28; letter-spacing: -.045em; font-weight: 750; }
+    .section-desc { margin-top: 20px; max-width: 680px; color: var(--muted); font-size: 1.05rem; line-height: 1.95; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(37,99,235,.16); border-radius: 99px; padding: 8px 13px; background: rgba(255,255,255,.72); color: #2854a3; font-size: .78rem; font-weight: 650; box-shadow: 0 4px 18px rgba(36,81,164,.04); }
+    .eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 0 4px rgba(16,185,129,.12); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 21px; border: 1px solid transparent; border-radius: 14px; font-size: .92rem; font-weight: 700; transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease; cursor: pointer; white-space: nowrap; }
+    .btn-primary { color: #fff; background: linear-gradient(110deg, #2563eb, #6552e8 72%, #7955e9); box-shadow: 0 10px 26px rgba(63,91,220,.23); }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 34px rgba(37,99,235,.27), 0 0 0 5px rgba(16,185,129,.10); }
+    .btn-secondary { color: #24426f; border-color: #d9e3f4; background: rgba(255,255,255,.76); box-shadow: 0 5px 18px rgba(28,55,94,.04); }
+    .btn-secondary:hover { transform: translateY(-3px); border-color: #a8c1f8; box-shadow: 0 10px 24px rgba(38,80,150,.10), 0 0 0 4px rgba(16,185,129,.08); }
+    .btn .btn-status { display: none; margin-left: 3px; padding-left: 9px; border-left: 1px solid rgba(255,255,255,.32); color: #d1fae5; font-size: .68rem; font-weight: 600; }
+    .btn-primary:hover .btn-status, .btn-primary:focus-visible .btn-status { display: inline; }
+    .btn-secondary .btn-status { color: #047857; border-left-color: #b9e8d8; }
+    .btn-secondary:hover .btn-status, .btn-secondary:focus-visible .btn-status { display: inline; }
+    .icon-arrow { width: 16px; height: 16px; flex: none; }
+
+    /* Header / navigation */
+    .site-header { position: fixed; inset: 0 0 auto; z-index: 50; height: var(--nav-height); border-bottom: 1px solid rgba(221,230,243,.72); background: rgba(255,255,255,.78); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); transition: box-shadow .25s ease, background .25s ease; }
+    .site-header.scrolled { background: rgba(255,255,255,.94); box-shadow: 0 8px 28px rgba(24,49,89,.06); }
+    .nav-inner { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
+    .brand { display: inline-flex; align-items: center; gap: 11px; min-width: max-content; }
+    .brand-mark { position: relative; display: grid; place-items: center; width: 37px; height: 37px; overflow: hidden; border-radius: 12px; color: #fff; background: linear-gradient(145deg, #3474f1, #7158e8); box-shadow: 0 6px 15px rgba(54,96,215,.22); }
+    .brand-mark::before, .brand-mark::after { content: ""; position: absolute; border: 1.4px solid rgba(255,255,255,.85); border-radius: 5px; transform: rotate(45deg); }
+    .brand-mark::before { width: 17px; height: 17px; }
+    .brand-mark::after { width: 8px; height: 8px; border-color: #9df5d7; transform: translate(5px,-5px) rotate(45deg); }
+    .brand-name { display: block; color: #142440; font-size: .95rem; font-weight: 800; letter-spacing: .025em; line-height: 1.25; }
+    .brand-sub { display: block; margin-top: 3px; color: #8190a8; font-size: .58rem; font-weight: 650; letter-spacing: .17em; line-height: 1; }
+    .desktop-nav { display: flex; align-items: center; gap: clamp(15px, 2vw, 27px); }
+    .nav-link { position: relative; padding-block: 12px; color: #526079; font-size: .82rem; font-weight: 650; transition: color .2s ease; white-space: nowrap; }
+    .nav-link::after { content: ""; position: absolute; left: 0; bottom: 5px; width: 100%; height: 2px; border-radius: 2px; background: linear-gradient(90deg, var(--blue), var(--violet)); transform: scaleX(0); transform-origin: left; transition: transform .2s ease; }
+    .nav-link:hover, .nav-link.active { color: var(--blue); }
+    .nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+    .nav-cta { min-height: 42px; padding-inline: 16px; border-radius: 12px; font-size: .82rem; }
+    .menu-toggle { display: none; width: 44px; height: 44px; place-items: center; border: 1px solid var(--line); border-radius: 13px; color: var(--ink); background: #fff; }
+    .mobile-menu { display: none; }
+
+    /* Hero */
+    .hero { position: relative; min-height: 770px; padding: calc(var(--nav-height) + 75px) 0 82px; overflow: hidden; isolation: isolate; background: radial-gradient(ellipse at 74% 16%, rgba(213,226,255,.65), transparent 37%), radial-gradient(ellipse at 92% 75%, rgba(231,220,255,.46), transparent 36%), linear-gradient(180deg, #fff 0%, #fbfdff 64%, #f8fbff 100%); }
+    .hero::before { content: ""; position: absolute; z-index: -2; inset: 0; opacity: .42; background-image: linear-gradient(rgba(104,140,198,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(104,140,198,.08) 1px, transparent 1px); background-size: 58px 58px; mask-image: linear-gradient(90deg, transparent 6%, black 75%); }
+    .hero::after { content: ""; position: absolute; z-index: -1; width: 560px; height: 560px; right: -150px; top: 35px; border-radius: 50%; background: radial-gradient(circle, rgba(115,155,255,.13), rgba(153,132,255,.06) 45%, transparent 70%); filter: blur(12px); pointer-events: none; }
+    #hero-network { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; pointer-events: none; opacity: .6; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(390px, .95fr); align-items: center; gap: clamp(36px, 6vw, 80px); }
+    .hero-copy { position: relative; z-index: 2; }
+    .hero h1 { margin: 25px 0 20px; max-width: 680px; font-size: clamp(2.65rem, 5.35vw, 4.5rem); line-height: 1.2; font-weight: 820; letter-spacing: -.065em; color: #13213b; min-height: 2.42em; }
+    .hero h1 .headline-gradient { color: #315cbd; background: linear-gradient(100deg, #245de0 7%, #6056e9 68%, #8062df); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .typing-caret { display: inline-block; width: 3px; height: .84em; margin-left: 5px; vertical-align: -.03em; border-radius: 3px; background: #4177ec; animation: caretBlink 1s steps(2,start) infinite; }
+    @keyframes caretBlink { to { visibility: hidden; } }
+    .hero-lead { max-width: 550px; color: #586780; font-size: clamp(1rem, 1.6vw, 1.13rem); line-height: 1.95; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 13px; margin-top: 31px; }
+    .hero-trust { display: flex; flex-wrap: wrap; gap: 10px 20px; margin-top: 32px; color: #697a94; font-size: .79rem; }
+    .hero-trust span { display: inline-flex; align-items: center; gap: 8px; }
+    .check-small { display: grid; place-items: center; width: 17px; height: 17px; border-radius: 50%; color: #148c69; background: #dcf8ee; font-size: .7rem; font-weight: 900; }
+    .hero-visual { position: relative; min-width: 0; perspective: 1000px; }
+    .visual-glow { position: absolute; inset: 12% 3% 3%; border-radius: 50%; background: linear-gradient(135deg, rgba(61,125,246,.16), rgba(137,95,239,.12)); filter: blur(50px); }
+    .dashboard { position: relative; border: 1px solid rgba(194,210,239,.82); border-radius: 26px; background: rgba(255,255,255,.78); box-shadow: 0 30px 90px rgba(42,75,133,.15), inset 0 1px 0 rgba(255,255,255,.9); overflow: hidden; transform: rotateY(-5deg) rotateX(2deg); transition: transform .45s ease; backdrop-filter: blur(14px); }
+    .hero-visual:hover .dashboard { transform: rotateY(0) rotateX(0) translateY(-4px); }
+    .dash-top { display: flex; align-items: center; justify-content: space-between; padding: 18px 21px; border-bottom: 1px solid #e9eef7; }
+    .dash-title { display: flex; align-items: center; gap: 10px; color: #2c3c59; font-size: .84rem; font-weight: 750; }
+    .dash-logo { display: grid; place-items: center; width: 29px; height: 29px; border-radius: 9px; color: #fff; background: linear-gradient(135deg,#3475ef,#7b5be8); }
+    .dash-dots { display: flex; gap: 5px; }
+    .dash-dots i { width: 6px; height: 6px; border-radius: 50%; background: #d6deeb; }
+    .dash-body { display: grid; grid-template-columns: 116px minmax(0,1fr); min-height: 333px; }
+    .dash-side { padding: 20px 12px; border-right: 1px solid #edf1f8; background: rgba(246,249,254,.7); }
+    .side-label { margin: 0 0 12px 9px; color: #9ba8bc; font-size: .6rem; letter-spacing: .1em; }
+    .side-item { display: flex; align-items: center; gap: 8px; padding: 10px 9px; margin-bottom: 5px; border-radius: 9px; color: #7e8ba1; font-size: .66rem; }
+    .side-item.active { color: #2a5bc3; background: #e9f0ff; font-weight: 750; }
+    .side-ico { width: 13px; height: 13px; border: 1.5px solid currentColor; border-radius: 4px; opacity: .85; }
+    .dash-main { padding: 22px 20px 20px; min-width: 0; }
+    .dash-greeting { color: #7b8aa2; font-size: .67rem; }
+    .dash-main h3 { margin: 4px 0 17px; color: #203452; font-size: 1.02rem; font-weight: 780; letter-spacing: -.02em; }
+    .mini-stats { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+    .mini-stat { padding: 12px; border: 1px solid #e9eef7; border-radius: 12px; background: #fff; }
+    .mini-stat-head { display: flex; align-items: center; justify-content: space-between; color: #8795aa; font-size: .61rem; }
+    .stat-bubble { display: grid; place-items: center; width: 23px; height: 23px; border-radius: 7px; color: #3c6fdb; background: #edf3ff; font-size: .7rem; }
+    .mini-stat strong { display: block; margin-top: 8px; color: #243958; font-size: 1.25rem; font-weight: 800; }
+    .mini-stat small { color: #8190a5; font-size: .59rem; }
+    .workflow-panel { margin-top: 13px; padding: 14px; border: 1px solid #e9eef7; border-radius: 12px; background: linear-gradient(135deg,#fff,#fbfcff); }
+    .workflow-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 15px; color: #30415e; font-size: .67rem; font-weight: 750; }
+    .flow-status { padding: 4px 7px; border-radius: 6px; color: #07815e; background: #e6faf2; font-size: .58rem; }
+    .workflow-line { display: flex; align-items: center; justify-content: space-between; gap: 5px; }
+    .flow-node { display: flex; flex: 1; min-width: 0; flex-direction: column; align-items: center; gap: 7px; color: #8290a7; font-size: .56rem; text-align: center; }
+    .flow-node-icon { display: grid; place-items: center; width: 31px; height: 31px; border: 1px solid #dce6fb; border-radius: 10px; color: #3c71d7; background: #f0f5ff; font-size: .75rem; }
+    .flow-node.done .flow-node-icon { border-color: #c7f0e2; color: #09966c; background: #e9fbf4; }
+    .flow-node.current .flow-node-icon { border-color: #c7c9ff; color: #7054dc; background: #f0edff; box-shadow: 0 0 0 4px rgba(124,58,237,.06); }
+    .flow-connector { flex: 0 0 13px; height: 1px; margin-top: -18px; background: #cbd8ef; }
+    .floating-note { position: absolute; display: flex; align-items: center; gap: 11px; padding: 12px 15px; border: 1px solid rgba(213,225,246,.9); border-radius: 15px; background: rgba(255,255,255,.91); box-shadow: 0 14px 36px rgba(37,73,134,.12); backdrop-filter: blur(12px); }
+    .floating-note.note-one { top: 15%; left: -40px; animation: bob 5s ease-in-out infinite; }
+    .floating-note.note-two { right: -22px; bottom: 12%; animation: bob 5.5s ease-in-out 1s infinite; }
+    .floating-icon { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 11px; color: #3169db; background: #edf4ff; }
+    .floating-note strong { display: block; color: #2a3d5a; font-size: .73rem; }
+    .floating-note small { display: block; margin-top: 3px; color: #8694a9; font-size: .63rem; }
+    @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+    .hero-bottom { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 75px; padding-top: 25px; border-top: 1px solid rgba(208,220,239,.8); }
+    .hero-bottom-label { color: #8a98ad; font-size: .73rem; font-weight: 650; letter-spacing: .09em; }
+    .product-wordmarks { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 26px; }
+    .product-wordmark { display: inline-flex; align-items: center; gap: 8px; color: #6d7c94; font-size: .85rem; font-weight: 800; letter-spacing: -.02em; }
+    .product-wordmark b { color: #315ec1; }
+    .wordmark-dot { width: 6px; height: 6px; border-radius: 50%; background: linear-gradient(135deg,#3b82f6,#8b5cf6); }
+
+    /* General sections */
+    .about { position: relative; overflow: hidden; background: #fff; }
+    .about::before { content: ""; position: absolute; width: 430px; height: 430px; right: -220px; top: 100px; border-radius: 50%; background: rgba(224,234,255,.42); filter: blur(60px); pointer-events: none; }
+    .about-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(50px, 8vw, 106px); align-items: start; }
+    .about-left { position: sticky; top: calc(var(--nav-height) + 34px); }
+    .about-manifesto { margin-top: 32px; padding: 24px 25px; border-left: 3px solid #4d76e8; border-radius: 0 16px 16px 0; background: linear-gradient(100deg,#f2f6ff,#fbfcff); color: #475b7b; font-size: .95rem; line-height: 1.9; }
+    .about-years { display: flex; align-items: baseline; gap: 13px; margin-top: 40px; }
+    .about-years strong { color: #2d5fca; font-size: clamp(3.8rem,6vw,5.2rem); font-weight: 850; letter-spacing: -.08em; line-height: .95; }
+    .about-years span { color: #71819a; font-size: .82rem; line-height: 1.7; }
+    .about-points { display: grid; gap: 0; }
+    .about-point { position: relative; display: grid; grid-template-columns: 47px minmax(0,1fr); gap: 19px; padding: 0 0 34px; margin-bottom: 32px; border-bottom: 1px solid #e9eef6; }
+    .about-point:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: 0; }
+    .point-number { display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid #dce6fa; border-radius: 14px; color: #3b68cc; background: linear-gradient(145deg,#f4f7ff,#fff); font-size: .78rem; font-weight: 800; }
+    .about-point h3 { margin: 1px 0 10px; color: #1c2e4c; font-size: 1.14rem; font-weight: 800; letter-spacing: -.02em; }
+    .about-point p { margin: 0; color: #697890; font-size: .91rem; line-height: 1.95; }
+    .product-strip { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 9px; margin-top: 19px; }
+    .strip-item { display: flex; align-items: center; justify-content: center; gap: 7px; min-width: 0; padding: 12px 6px; border: 1px solid #e5ebf5; border-radius: 10px; background: rgba(255,255,255,.85); color: #37588e; font-size: .75rem; font-weight: 800; }
+    .strip-item span { display: block; overflow: hidden; text-overflow: ellipsis; }
+
+    .products { position: relative; overflow: hidden; background: linear-gradient(180deg,#f7faff 0%,#f9fbff 100%); }
+    .products::before { content: ""; position: absolute; width: 580px; height: 580px; top: -320px; left: 38%; border-radius: 50%; background: rgba(210,223,255,.42); filter: blur(70px); pointer-events: none; }
+    .section-head-row { display: flex; align-items: end; justify-content: space-between; gap: 32px; margin-bottom: 48px; }
+    .section-head-row .section-desc { max-width: 390px; margin-top: 0; font-size: .94rem; }
+    .product-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 20px; }
+    .product-card { position: relative; display: grid; grid-template-columns: minmax(0,1fr) 165px; gap: 12px; min-height: 300px; padding: 29px 27px; border: 1px solid rgba(218,228,244,.9); border-radius: 22px; background: rgba(255,255,255,.87); box-shadow: 0 8px 28px rgba(40,74,128,.035); overflow: hidden; transition: transform .32s ease, border-color .32s ease, box-shadow .32s ease; }
+    .product-card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 3px; background: linear-gradient(180deg,var(--card-color),transparent 85%); opacity: .7; }
+    .product-card:hover { transform: translateY(-6px); border-color: rgba(139,166,229,.85); box-shadow: 0 22px 48px rgba(40,74,128,.09), 0 0 0 4px rgba(37,99,235,.025); }
+    .product-card.bpm { --card-color: #3974e9; --card-tint: #edf4ff; }
+    .product-card.eip { --card-color: #7c5ce5; --card-tint: #f3efff; }
+    .product-card.iso { --card-color: #159d80; --card-tint: #e9faf5; }
+    .product-card.hr { --card-color: #d28a36; --card-tint: #fff5e7; }
+    .product-overline { color: var(--card-color); font-size: .71rem; font-weight: 800; letter-spacing: .15em; }
+    .product-card h3 { margin: 8px 0 3px; color: #192b48; font-size: 1.55rem; font-weight: 850; letter-spacing: -.04em; }
+    .product-type { color: #425572; font-size: .87rem; font-weight: 700; }
+    .product-card p { max-width: 320px; margin: 15px 0 21px; color: #6d7b91; font-size: .87rem; line-height: 1.85; }
+    .text-link { display: inline-flex; align-items: center; gap: 8px; color: #2d5fc6; font-size: .81rem; font-weight: 800; transition: gap .2s ease; }
+    .text-link:hover { gap: 12px; }
+    .product-visual { position: relative; align-self: center; justify-self: end; width: 155px; height: 195px; display: grid; place-items: center; }
+    .visual-bpm { position: relative; width: 128px; height: 160px; padding: 14px 11px; border: 1px solid #d8e4fb; border-radius: 15px; background: linear-gradient(155deg,#fff,#f3f7ff); box-shadow: 0 13px 30px rgba(43,98,190,.11); transform: rotate(4deg); }
+    .mock-top { display: flex; align-items: center; gap: 5px; padding-bottom: 11px; border-bottom: 1px solid #e4ebf7; }
+    .mock-top i { width: 5px; height: 5px; border-radius: 50%; background: #7ba0ed; }
+    .mock-line { height: 5px; margin-top: 10px; border-radius: 4px; background: #e5ecf8; }
+    .mock-line.short { width: 58%; }
+    .mock-field { height: 21px; margin-top: 7px; border: 1px solid #dfe8f7; border-radius: 5px; background: #fff; }
+    .mock-sign { display: flex; align-items: center; gap: 5px; margin-top: 10px; }
+    .mock-sign i { width: 19px; height: 19px; border-radius: 6px; background: #dce8ff; }
+    .mock-sign i:nth-child(2) { background: #d8f7ed; }
+    .mock-sign i:nth-child(3) { background: #e8e0ff; }
+    .float-chip { position: absolute; display: grid; place-items: center; min-width: 37px; height: 37px; padding: 0 9px; border: 1px solid rgba(255,255,255,.95); border-radius: 12px; background: var(--card-tint); color: var(--card-color); box-shadow: 0 8px 22px rgba(39,71,121,.13); font-size: .7rem; font-weight: 900; }
+    .visual-bpm .float-chip { right: -16px; bottom: 21px; }
+    .visual-eip { position: relative; width: 143px; height: 151px; padding: 12px; border: 1px solid #e3dafa; border-radius: 17px; background: linear-gradient(145deg,#fff,#f7f3ff); box-shadow: 0 13px 30px rgba(103,73,175,.10); transform: rotate(-3deg); }
+    .eip-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; color: #7964ba; font-size: .55rem; font-weight: 800; }
+    .eip-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
+    .eip-grid span { aspect-ratio: 1; border-radius: 7px; background: #ebe4ff; }
+    .eip-grid span:nth-child(2n) { background: #e3eaff; }
+    .eip-grid span:nth-child(3n) { background: #def8ef; }
+    .eip-task { height: 7px; margin-top: 7px; border-radius: 4px; background: #e9e2fa; }
+    .eip-task:nth-last-child(1) { width: 62%; }
+    .visual-eip .float-chip { right: -18px; top: 18px; }
+    .visual-iso { position: relative; width: 131px; height: 161px; }
+    .iso-sheet { position: absolute; width: 99px; height: 128px; top: 15px; left: 18px; border: 1px solid #cfece4; border-radius: 12px; background: #fff; box-shadow: 0 11px 24px rgba(20,127,103,.1); }
+    .iso-sheet.back { top: 5px; left: 28px; background: #eefaf6; transform: rotate(8deg); }
+    .iso-sheet.front { padding: 14px 11px; transform: rotate(-5deg); }
+    .iso-seal { display: grid; place-items: center; width: 29px; height: 29px; border: 2px solid #69c9ac; border-radius: 50%; color: #168c70; font-size: .65rem; font-weight: 900; }
+    .iso-line { height: 4px; margin-top: 8px; border-radius: 4px; background: #dcefe9; }
+    .visual-iso .float-chip { right: -4px; bottom: 2px; }
+    .visual-hr { position: relative; width: 145px; height: 162px; padding: 12px; border: 1px solid #f3dfc4; border-radius: 17px; background: linear-gradient(150deg,#fff,#fff9f0); box-shadow: 0 13px 30px rgba(168,110,35,.1); transform: rotate(4deg); }
+    .hr-month { display: flex; justify-content: space-between; color: #9b702e; font-size: .58rem; font-weight: 850; }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; margin-top: 12px; }
+    .calendar-grid span { display: grid; place-items: center; aspect-ratio: 1; border-radius: 5px; color: #aa9b85; font-size: .52rem; background: rgba(255,255,255,.7); }
+    .calendar-grid span:nth-child(10), .calendar-grid span:nth-child(15), .calendar-grid span:nth-child(22) { color: #fff; background: #de9d4f; }
+    .hr-person { position: absolute; right: -10px; bottom: -5px; display: grid; place-items: center; width: 43px; height: 43px; border: 4px solid #fff; border-radius: 50%; color: #9c6826; background: #ffe6c1; font-size: .8rem; font-weight: 900; }
+    .product-bottom-note { display: flex; align-items: center; gap: 11px; margin-top: 26px; padding: 16px 20px; border: 1px solid #e5ebf5; border-radius: 13px; color: #61718a; background: rgba(255,255,255,.65); font-size: .82rem; line-height: 1.7; }
+    .product-bottom-note svg { flex: none; color: #4c74d9; }
+
+    .advantages { background: #fff; }
+    .advantages-layout { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(40px,8vw,100px); align-items: center; }
+    .advantage-note { margin-top: 31px; padding: 22px 24px; border: 1px solid #e3ebf9; border-radius: 16px; background: linear-gradient(125deg,#f4f7ff,#fbfdff); }
+    .advantage-note strong { display: block; margin-bottom: 8px; color: #284a8c; font-size: .92rem; }
+    .advantage-note p { margin: 0; color: #718098; font-size: .85rem; line-height: 1.8; }
+    .architecture { position: relative; padding: 27px; border: 1px solid #e3eaf6; border-radius: 25px; background: linear-gradient(155deg,#fbfdff,#f4f7ff); box-shadow: 0 18px 50px rgba(35,71,130,.07); overflow: hidden; }
+    .architecture::before { content: ""; position: absolute; width: 270px; height: 270px; right: -130px; top: -120px; border-radius: 50%; background: rgba(125,113,255,.09); filter: blur(15px); }
+    .arch-label { position: relative; color: #8795ac; font-size: .68rem; font-weight: 800; letter-spacing: .14em; }
+    .arch-core { position: relative; display: flex; align-items: center; justify-content: center; gap: 13px; width: min(280px,100%); margin: 23px auto 37px; padding: 16px 20px; border: 1px solid #ccdbfb; border-radius: 15px; background: #fff; box-shadow: 0 8px 22px rgba(44,94,180,.08); }
+    .arch-core-icon { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 11px; color: #fff; background: linear-gradient(135deg,#3176ec,#7657e7); }
+    .arch-core strong { display: block; color: #223958; font-size: .9rem; }
+    .arch-core span { display: block; margin-top: 3px; color: #8492a8; font-size: .65rem; }
+    .arch-connector { position: relative; width: 1px; height: 23px; margin: -37px auto 14px; background: #bdcdef; }
+    .arch-connector::after { content: ""; position: absolute; bottom: 0; left: -4px; width: 8px; height: 8px; border-right: 1px solid #93afea; border-bottom: 1px solid #93afea; transform: rotate(45deg); }
+    .arch-nodes { position: relative; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+    .arch-node { display: flex; align-items: center; gap: 11px; min-width: 0; padding: 15px 13px; border: 1px solid #e2eaf7; border-radius: 13px; background: rgba(255,255,255,.86); }
+    .arch-node-ico { display: grid; place-items: center; flex: none; width: 33px; height: 33px; border-radius: 10px; color: #396bd0; background: #edf3ff; }
+    .arch-node strong { display: block; color: #344966; font-size: .77rem; }
+    .arch-node span { display: block; margin-top: 4px; color: #8b98ad; font-size: .64rem; line-height: 1.5; }
+    .value-list { display: grid; gap: 14px; margin-top: 34px; }
+    .value-item { display: grid; grid-template-columns: 50px minmax(0,1fr); gap: 16px; align-items: start; padding: 19px 0; border-bottom: 1px solid #edf0f6; }
+    .value-item:last-child { border-bottom: 0; }
+    .value-icon { display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid #dce6f9; border-radius: 15px; color: #3e6fd1; background: #f4f7ff; }
+    .value-item:nth-child(2) .value-icon { color: #7251d7; background: #f5f1ff; border-color: #e7ddff; }
+    .value-item:nth-child(3) .value-icon { color: #118b70; background: #edfbf6; border-color: #d7f3e9; }
+    .value-item:nth-child(4) .value-icon { color: #bc8136; background: #fff7eb; border-color: #f6e9d4; }
+    .value-item h3 { margin: 1px 0 7px; font-size: 1.02rem; font-weight: 800; color: #203451; }
+    .value-item p { margin: 0; color: #697990; font-size: .87rem; line-height: 1.8; }
+
+    .services { position: relative; overflow: hidden; background: #f7f9fd; }
+    .services::before { content: ""; position: absolute; left: -180px; bottom: -220px; width: 500px; height: 500px; border-radius: 50%; background: rgba(216,231,255,.48); filter: blur(75px); }
+    .services-top { display: flex; align-items: end; justify-content: space-between; gap: 36px; margin-bottom: 45px; }
+    .services-top .section-desc { max-width: 470px; margin-top: 0; }
+    .service-grid { position: relative; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 15px; }
+    .service-card { min-height: 222px; padding: 25px 23px; border: 1px solid #e1e8f3; border-radius: 19px; background: rgba(255,255,255,.88); transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease; }
+    .service-card:hover { transform: translateY(-5px); border-color: #c4d5f6; box-shadow: 0 18px 38px rgba(36,70,125,.08), 0 0 0 4px rgba(37,99,235,.025); }
+    .service-card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .service-icon { display: grid; place-items: center; width: 45px; height: 45px; border: 1px solid #dce7fb; border-radius: 14px; color: #376ad0; background: linear-gradient(145deg,#edf4ff,#fafcff); }
+    .service-index { color: #b8c4d6; font-size: .71rem; font-weight: 800; letter-spacing: .1em; }
+    .service-card h3 { margin: 21px 0 9px; color: #203451; font-size: 1rem; font-weight: 800; letter-spacing: -.02em; }
+    .service-card p { margin: 0; color: #6f7e94; font-size: .84rem; line-height: 1.85; }
+    .services-footer { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 28px; padding: 24px 27px; border: 1px solid #dfe8f7; border-radius: 17px; background: linear-gradient(100deg,#eff5ff,#fcfdff 72%); }
+    .services-footer strong { display: block; color: #294675; font-size: .98rem; }
+    .services-footer p { margin: 6px 0 0; color: #75839a; font-size: .83rem; line-height: 1.7; }
+
+    .industries { background: #fff; }
+    .industry-layout { display: grid; grid-template-columns: .78fr 1.22fr; gap: clamp(40px,8vw,100px); align-items: start; }
+    .industry-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+    .industry-tag { display: inline-flex; align-items: center; gap: 8px; padding: 10px 13px; border: 1px solid #e1e8f4; border-radius: 10px; color: #52647f; background: #fbfcff; font-size: .82rem; font-weight: 650; }
+    .industry-tag::before { content: ""; width: 6px; height: 6px; border-radius: 2px; background: #5f86e8; transform: rotate(45deg); }
+    .client-panel { padding: 30px; border: 1px solid #e2eaf7; border-radius: 23px; background: linear-gradient(145deg,#fbfdff,#f7f9ff); }
+    .client-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 22px; border-bottom: 1px solid #e5ebf5; }
+    .client-panel-head h3 { margin: 0; color: #263b5d; font-size: 1rem; font-weight: 800; }
+    .client-panel-head span { color: #93a0b4; font-size: .7rem; }
+    .client-names { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; padding-top: 22px; }
+    .client-name { display: flex; align-items: center; gap: 12px; min-height: 67px; padding: 15px; border: 1px solid #e6ecf6; border-radius: 13px; background: rgba(255,255,255,.8); color: #304765; font-size: .9rem; font-weight: 800; }
+    .client-symbol { display: grid; place-items: center; flex: none; width: 31px; height: 31px; border: 1px solid #dfe7f8; border-radius: 9px; color: #4870c5; background: #f1f5ff; font-size: .73rem; font-weight: 900; }
+    .client-name:nth-child(2) .client-symbol { color: #8a64bd; background: #f6f0ff; border-color: #e9ddfa; }
+    .client-name:nth-child(3) .client-symbol { color: #21836d; background: #edfaf5; border-color: #d8f1e7; }
+    .client-name:nth-child(4) .client-symbol { color: #c18135; background: #fff6e9; border-color: #f5e6d0; }
+    .client-name:nth-child(5) { grid-column: 1 / -1; }
+    .client-caveat { margin: 19px 0 0; color: #91a0b4; font-size: .73rem; line-height: 1.7; }
+    .scenario-wrap { margin-top: 75px; padding-top: 34px; border-top: 1px solid #e9eef6; }
+    .scenario-title { margin: 0 0 22px; color: #273b5a; font-size: 1.1rem; font-weight: 800; }
+    .scenario-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 13px; }
+    .scenario { display: flex; gap: 13px; align-items: start; padding: 19px; border: 1px solid #e7edf6; border-radius: 15px; }
+    .scenario-num { color: #4c72cf; font-size: .73rem; font-weight: 850; }
+    .scenario p { margin: 0; color: #65758e; font-size: .84rem; line-height: 1.8; }
+
+    /* Core products */
+    .core-products { position: relative; overflow: hidden; background: linear-gradient(180deg,#f7faff 0%,#ffffff 100%); }
+    .core-products::before { content: ""; position: absolute; width: 520px; height: 520px; right: -180px; top: -260px; border-radius: 50%; background: rgba(213,225,255,.48); filter: blur(70px); pointer-events: none; }
+    .core-products-head { position: relative; margin-bottom: 42px; }
+    .core-products-grid { position: relative; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; }
+    .core-product-card { position: relative; display: flex; min-height: 310px; flex-direction: column; padding: 27px 25px 24px; border: 1px solid #e0e8f5; border-radius: 21px; background: rgba(255,255,255,.9); box-shadow: 0 10px 30px rgba(39,73,127,.055); transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease; }
+    .core-product-card:hover { transform: translateY(-6px); border-color: #b8cdf5; box-shadow: 0 22px 44px rgba(39,73,127,.11); }
+    .core-product-icon { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 16px; color: var(--card-color); background: var(--card-tint); font-size: 1.35rem; }
+    .core-product-card.bpm { --card-color: #3474e8; --card-tint: #edf4ff; }
+    .core-product-card.eip { --card-color: #7656dc; --card-tint: #f3efff; }
+    .core-product-card.iso { --card-color: #159575; --card-tint: #e9faf4; }
+    .core-product-card h3 { margin: 22px 0 9px; color: #1d3150; font-size: 1.35rem; font-weight: 850; letter-spacing: -.035em; }
+    .core-product-card p { flex: 1; margin: 0; color: #687891; font-size: .87rem; line-height: 1.9; }
+    .core-product-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; color: var(--card-color); font-size: .82rem; font-weight: 800; }
+    .core-product-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+    .contact { position: relative; overflow: hidden; padding-block: 100px; background: linear-gradient(135deg,#f4f8ff 0%,#f8f6ff 58%,#f1fcf8 100%); }
+    .contact::before { content: ""; position: absolute; width: 480px; height: 480px; left: -170px; top: -230px; border-radius: 50%; background: rgba(148,185,255,.23); filter: blur(70px); }
+    .contact::after { content: ""; position: absolute; width: 440px; height: 440px; right: -130px; bottom: -250px; border-radius: 50%; background: rgba(176,151,255,.17); filter: blur(65px); }
+    .contact-shell { position: relative; display: grid; grid-template-columns: 1.15fr .85fr; gap: 50px; align-items: center; padding: clamp(30px,5vw,60px); border: 1px solid rgba(213,225,246,.9); border-radius: 28px; background: rgba(255,255,255,.74); box-shadow: 0 24px 70px rgba(56,79,132,.09); backdrop-filter: blur(16px); }
+    .contact h2 { max-width: 590px; margin: 18px 0 17px; color: #172b49; font-size: clamp(2rem,4vw,3.15rem); font-weight: 820; line-height: 1.3; letter-spacing: -.05em; }
+    .contact-copy { max-width: 540px; margin: 0; color: #687891; font-size: .98rem; line-height: 1.95; }
+    .contact-aside { padding: 26px; border: 1px solid #e3eaf7; border-radius: 20px; background: rgba(255,255,255,.79); }
+    .contact-aside-top { display: flex; align-items: center; gap: 13px; padding-bottom: 22px; border-bottom: 1px solid #e9eef6; }
+    .contact-round-icon { display: grid; place-items: center; width: 45px; height: 45px; border-radius: 14px; color: #fff; background: linear-gradient(135deg,#3477eb,#7957e7); box-shadow: 0 8px 18px rgba(65,95,209,.19); }
+    .contact-aside-top strong { display: block; color: #273b58; font-size: .98rem; }
+    .contact-aside-top span { display: block; margin-top: 5px; color: #8b98ac; font-size: .73rem; }
+    .contact-detail { display: flex; gap: 11px; align-items: start; padding: 17px 0 0; color: #75839a; font-size: .83rem; line-height: 1.7; }
+    .contact-detail svg { flex: none; margin-top: 2px; color: #4d73d1; }
+    .contact-socials { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 23px; padding-top: 21px; border-top: 1px solid #e9eef6; }
+    .contact-social-link { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 13px; border: 1px solid #dfe7f5; border-radius: 11px; color: #526784; background: #fbfcff; font-size: .78rem; font-weight: 750; transition: transform .2s ease, border-color .2s ease, color .2s ease, background .2s ease; }
+    .contact-social-link:hover { transform: translateY(-3px); border-color: var(--social-color); color: var(--social-color); background: #fff; }
+    .contact-social-link i { color: var(--social-color); font-size: .95rem; }
+    .contact-social-link.line { --social-color: #06c755; }
+    .contact-social-link.facebook { --social-color: #1877f2; }
+    .contact-social-link.youtube { --social-color: #ff0000; }
+    .contact-form-cta { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 22px; padding: 17px 18px; border: 1px solid #dce8fb; border-radius: 15px; background: linear-gradient(105deg,#f1f6ff,#fbfcff); }
+    .contact-form-cta strong { display: block; color: #294675; font-size: .87rem; }
+    .contact-form-cta span { display: block; margin-top: 4px; color: #8290a5; font-size: .7rem; line-height: 1.5; }
+    .contact-form-link { display: inline-flex; align-items: center; flex: none; gap: 7px; color: #2d5fca; font-size: .77rem; font-weight: 800; white-space: nowrap; }
+    .contact-form-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+    .contact .btn { margin-top: 25px; }
+    .contact-footnote { margin-top: 13px; color: #94a0b2; font-size: .7rem; line-height: 1.7; }
+
+    /* Brand palette application: 60% neutral / 25% primary / 10% teal / 5% green */
+    .hero { background: radial-gradient(ellipse at 74% 16%, rgba(92,200,215,.18), transparent 37%), radial-gradient(ellipse at 92% 75%, rgba(0,167,181,.12), transparent 36%), linear-gradient(180deg,#fff 0%,#F5F7FA 100%); }
+    .hero::before { background-image: linear-gradient(rgba(0,91,172,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(0,91,172,.08) 1px, transparent 1px); }
+    .hero::after { background: radial-gradient(circle, rgba(0,91,172,.12), rgba(0,167,181,.08) 45%, transparent 70%); }
+    .brand-mark, .btn-primary { background: linear-gradient(135deg,#005BAC,#0A3D91); }
+    .brand-mark::after { border-color: #7AC143; }
+    .btn-primary:hover { box-shadow: 0 14px 34px rgba(0,91,172,.27), 0 0 0 5px rgba(122,193,67,.14); }
+    .btn-secondary:hover { border-color: #5CC8D7; box-shadow: 0 10px 24px rgba(0,91,172,.10), 0 0 0 4px rgba(0,167,181,.10); }
+    .section-kicker, .nav-link:hover, .nav-link.active, .text-link, .core-product-link { color: #005BAC; }
+    .nav-link::after { background: linear-gradient(90deg,#005BAC,#00A7B5); }
+    .hero h1 .headline-gradient { color: #005BAC; background: linear-gradient(100deg,#005BAC 7%,#0A3D91 68%,#00A7B5); }
+    .typing-caret { background: #00A7B5; }
+    .hero-trust, .section-desc, .product-card p, .service-card p, .contact-copy { color: #64748B; }
+    .check-small { color: #4f8f24; background: #eff9e8; }
+    .product-card.bpm { --card-color: #005BAC; --card-tint: #EAF4FC; }
+    .product-card.eip { --card-color: #00A7B5; --card-tint: #E8FAFC; }
+    .product-card.iso { --card-color: #7AC143; --card-tint: #F0F9E8; }
+    .product-card.hr { --card-color: #0A3D91; --card-tint: #EDF2FA; }
+    .products, .core-products { background: linear-gradient(180deg,#F5F7FA 0%,#FFFFFF 100%); }
+    .products::before { background: rgba(92,200,215,.16); }
+    .core-products::before { background: rgba(0,167,181,.12); }
+    .core-product-card.bpm { --card-color: #005BAC; --card-tint: #EAF4FC; }
+    .core-product-card.eip { --card-color: #00A7B5; --card-tint: #E8FAFC; }
+    .core-product-card.iso { --card-color: #7AC143; --card-tint: #F0F9E8; }
+    .service-icon, .value-icon, .arch-node-ico, .floating-icon { color: #005BAC; background: #EAF4FC; border-color: #D9EAF8; }
+    .service-card:nth-child(2) .service-icon, .value-item:nth-child(2) .value-icon { color: #00A7B5; background: #E8FAFC; border-color: #C8F0F4; }
+    .service-card:nth-child(3) .service-icon, .value-item:nth-child(3) .value-icon { color: #7AC143; background: #F0F9E8; border-color: #DDF0C7; }
+    .services { background: #F5F7FA; }
+    .services::before { background: rgba(92,200,215,.14); }
+    .services-footer { background: linear-gradient(100deg,#EAF4FC,#F5F7FA 72%); border-color: #D9E2EC; }
+    .industry-tag::before, .wordmark-dot { background: #00A7B5; }
+    .contact { background: linear-gradient(135deg,#EAF4FC 0%,#F5F7FA 58%,#F0F9E8 100%); }
+    .contact::before { background: rgba(92,200,215,.16); }
+    .contact::after { background: rgba(122,193,67,.12); }
+    .contact-round-icon { background: linear-gradient(135deg,#005BAC,#00A7B5); }
+    .footer { background: #1F2937; }
+    .footer .brand-sub { color: #D9E2EC; }
+    .footer-nav-col a:hover, .footer-bottom a { color: #5CC8D7; }
+
+    .footer { color: #b2bfd1; background: #101d32; }
+    .footer-main { display: grid; grid-template-columns: 1.25fr .75fr; gap: 60px; padding-block: 53px 42px; }
+    .footer .brand-name { color: #f2f6fc; }
+    .footer .brand-sub { color: #8798b3; }
+    .footer .brand-mark { box-shadow: none; }
+    .footer-desc { max-width: 420px; margin: 20px 0 0; color: #9aabc3; font-size: .84rem; line-height: 1.9; }
+    .footer-nav-wrap { display: flex; justify-content: flex-end; gap: clamp(35px,6vw,80px); }
+    .footer-nav-col h3 { margin: 0 0 16px; color: #eef3fb; font-size: .79rem; font-weight: 800; }
+    .footer-nav-col a { display: block; margin-top: 12px; color: #a2b0c4; font-size: .79rem; transition: color .2s ease; }
+    .footer-nav-col a:hover { color: #a8c4ff; }
+    .footer-bottom { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-block: 19px; border-top: 1px solid rgba(195,211,234,.13); color: #8191a9; font-size: .7rem; }
+    .footer-bottom a { color: #bac8dc; }
+    .back-top { display: inline-flex; align-items: center; gap: 8px; }
+
+    /* Motion and reveal */
+    .reveal { opacity: 1; transform: none; }
+    .js-motion .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+    .js-motion .reveal.is-visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: .08s !important; }
+    .reveal-delay-2 { transition-delay: .16s !important; }
+    .reveal-delay-3 { transition-delay: .24s !important; }
+
+    @media (max-width: 1100px) {
+      .desktop-nav { gap: 14px; }
+      .nav-link { font-size: .76rem; }
+      .hero-grid { grid-template-columns: minmax(0,1fr) minmax(350px,.9fr); gap: 35px; }
+      .floating-note.note-one { left: -18px; }
+      .floating-note.note-two { right: -9px; }
+      .product-card { grid-template-columns: minmax(0,1fr) 125px; padding: 25px 21px; }
+      .product-visual { transform: scale(.88); transform-origin: center right; margin-left: -15px; }
+    }
+    @media (max-width: 900px) {
+      :root { --nav-height: 70px; }
+      .container-wide { width: min(100% - 40px, 740px); }
+      .section-pad { padding-block: 84px; }
+      .desktop-nav, .desktop-nav-cta { display: none; }
+      .menu-toggle { display: grid; }
+      .mobile-menu { position: fixed; inset: var(--nav-height) 0 auto; z-index: 49; display: block; padding: 14px 20px 24px; border-bottom: 1px solid #e4eaf4; background: rgba(255,255,255,.97); box-shadow: 0 20px 30px rgba(21,47,85,.1); opacity: 0; visibility: hidden; transform: translateY(-8px); transition: opacity .2s ease, transform .2s ease, visibility .2s ease; backdrop-filter: blur(15px); }
+      .mobile-menu.open { opacity: 1; visibility: visible; transform: translateY(0); }
+      .mobile-menu nav { display: grid; gap: 4px; }
+      .mobile-menu .nav-link { padding: 13px 10px; border-radius: 9px; font-size: .92rem; }
+      .mobile-menu .nav-link::after { display: none; }
+      .mobile-menu .nav-link:hover, .mobile-menu .nav-link.active { background: #f0f5ff; }
+      .mobile-menu .mobile-cta { width: 100%; margin-top: 12px; }
+      .hero { min-height: auto; padding-top: calc(var(--nav-height) + 65px); }
+      .hero-grid { grid-template-columns: 1fr; gap: 56px; }
+      .hero-copy { max-width: 700px; }
+      .hero h1 { max-width: 660px; min-height: 2.15em; font-size: clamp(2.8rem,7vw,4.35rem); }
+      .hero-visual { width: min(100%,540px); margin-inline: auto; }
+      .hero-bottom { margin-top: 58px; }
+      .about-grid, .advantages-layout, .industry-layout { grid-template-columns: 1fr; gap: 48px; }
+      .about-left { position: static; }
+      .about-manifesto { max-width: 540px; }
+      .about-years { margin-top: 28px; }
+      .section-head-row, .services-top { align-items: start; flex-direction: column; gap: 17px; }
+      .section-head-row .section-desc, .services-top .section-desc { max-width: 650px; }
+      .product-card { grid-template-columns: minmax(0,1fr) 155px; }
+      .product-visual { transform: none; margin-left: 0; }
+      .advantages-layout { gap: 45px; }
+      .architecture { max-width: 610px; width: 100%; margin-inline: auto; }
+      .industry-layout { gap: 36px; }
+      .contact-shell { grid-template-columns: 1fr; gap: 34px; }
+      .contact-aside { max-width: 570px; }
+      .footer-main { grid-template-columns: 1fr; gap: 35px; }
+      .footer-nav-wrap { justify-content: flex-start; }
+    }
+    @media (max-width: 640px) {
+      :root { --nav-height: 66px; }
+      .container-wide { width: calc(100% - 36px); }
+      .section-pad { padding-block: 70px; }
+      .brand-mark { width: 34px; height: 34px; border-radius: 11px; }
+      .brand-name { font-size: .87rem; }
+      .brand-sub { font-size: .52rem; }
+      .hero { padding-top: calc(var(--nav-height) + 48px); padding-bottom: 56px; }
+      .hero::before { background-size: 38px 38px; opacity: .3; }
+      .hero-grid { gap: 42px; }
+      .eyebrow { font-size: .7rem; padding: 7px 11px; }
+      .hero h1 { margin-top: 22px; margin-bottom: 16px; min-height: 2.65em; font-size: clamp(2.36rem,10.5vw,3.45rem); line-height: 1.22; letter-spacing: -.065em; }
+      .hero-lead { font-size: .96rem; line-height: 1.9; }
+      .hero-actions { display: grid; grid-template-columns: 1fr; gap: 11px; margin-top: 25px; }
+      .hero-actions .btn { width: 100%; }
+      .hero-trust { gap: 10px 14px; margin-top: 25px; font-size: .73rem; }
+      .hero-visual { width: 100%; }
+      .dashboard { border-radius: 19px; transform: none; }
+      .dash-top { padding: 14px 15px; }
+      .dash-body { grid-template-columns: 82px minmax(0,1fr); min-height: 282px; }
+      .dash-side { padding: 15px 7px; }
+      .side-item { gap: 5px; padding: 9px 6px; font-size: .58rem; }
+      .side-ico { width: 11px; height: 11px; }
+      .side-label { margin-left: 6px; font-size: .55rem; }
+      .dash-main { padding: 17px 11px 13px; }
+      .dash-main h3 { font-size: .9rem; margin-bottom: 12px; }
+      .mini-stats { gap: 6px; }
+      .mini-stat { padding: 9px 8px; border-radius: 9px; }
+      .mini-stat-head { font-size: .54rem; }
+      .stat-bubble { width: 19px; height: 19px; font-size: .6rem; }
+      .mini-stat strong { font-size: 1.05rem; }
+      .mini-stat small { font-size: .52rem; }
+      .workflow-panel { padding: 10px 8px; margin-top: 9px; }
+      .workflow-head { font-size: .58rem; margin-bottom: 12px; }
+      .flow-connector { flex-basis: 8px; }
+      .flow-node { font-size: .49rem; }
+      .flow-node-icon { width: 26px; height: 26px; border-radius: 8px; }
+      .floating-note { gap: 8px; padding: 9px 10px; border-radius: 12px; }
+      .floating-note.note-one { top: -20px; left: -4px; }
+      .floating-note.note-two { right: -4px; bottom: -20px; }
+      .floating-icon { width: 28px; height: 28px; border-radius: 9px; }
+      .floating-note strong { font-size: .64rem; }
+      .floating-note small { font-size: .55rem; }
+      .hero-bottom { display: block; margin-top: 52px; padding-top: 20px; }
+      .product-wordmarks { gap: 13px 20px; margin-top: 17px; }
+      .product-wordmark { font-size: .78rem; }
+      .section-title { margin-top: 14px; font-size: clamp(1.8rem,8vw,2.55rem); }
+      .section-desc { margin-top: 15px; font-size: .94rem; line-height: 1.85; }
+      .about-grid { gap: 39px; }
+      .about-manifesto { margin-top: 24px; padding: 19px; font-size: .89rem; }
+      .about-years strong { font-size: 3.8rem; }
+      .about-point { grid-template-columns: 39px minmax(0,1fr); gap: 13px; padding-bottom: 26px; margin-bottom: 25px; }
+      .point-number { width: 39px; height: 39px; border-radius: 12px; }
+      .about-point h3 { font-size: 1rem; line-height: 1.5; }
+      .about-point p { font-size: .85rem; }
+      .product-strip { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .strip-item { justify-content: flex-start; padding-inline: 11px; }
+      .section-head-row, .services-top { margin-bottom: 30px; }
+      .core-products-head { margin-bottom: 30px; }
+      .core-products-grid { grid-template-columns: 1fr; gap: 13px; }
+      .core-product-card { min-height: auto; padding: 23px 20px; border-radius: 18px; }
+      .core-product-card h3 { margin-top: 17px; font-size: 1.25rem; }
+      .core-product-card p { font-size: .84rem; }
+      .product-grid { grid-template-columns: 1fr; gap: 13px; }
+      .product-card { grid-template-columns: minmax(0,1fr) 113px; min-height: 260px; gap: 5px; padding: 23px 18px; border-radius: 18px; }
+      .product-card h3 { font-size: 1.4rem; }
+      .product-type { font-size: .8rem; }
+      .product-card p { margin: 13px 0 17px; font-size: .82rem; }
+      .product-visual { width: 112px; transform: scale(.78); transform-origin: center right; margin-left: -13px; }
+      .product-bottom-note { align-items: start; padding: 14px; font-size: .77rem; }
+      .advantages-layout { gap: 34px; }
+      .architecture { padding: 19px 14px; border-radius: 19px; }
+      .arch-core { margin-top: 18px; margin-bottom: 32px; padding: 13px; }
+      .arch-node { gap: 8px; padding: 12px 9px; }
+      .arch-node-ico { width: 28px; height: 28px; }
+      .arch-node strong { font-size: .68rem; }
+      .arch-node span { font-size: .58rem; }
+      .value-item { grid-template-columns: 43px minmax(0,1fr); gap: 13px; padding: 14px 0; }
+      .value-icon { width: 42px; height: 42px; border-radius: 13px; }
+      .value-item h3 { font-size: .96rem; }
+      .value-item p { font-size: .82rem; }
+      .service-grid { grid-template-columns: 1fr; gap: 11px; }
+      .service-card { min-height: auto; padding: 21px; border-radius: 16px; }
+      .service-card h3 { margin-top: 15px; }
+      .service-card p { font-size: .83rem; }
+      .services-footer { align-items: flex-start; flex-direction: column; padding: 21px; }
+      .services-footer .btn { width: 100%; }
+      .industry-tags { gap: 8px; margin-top: 23px; }
+      .industry-tag { padding: 9px 11px; font-size: .77rem; }
+      .client-panel { padding: 19px; border-radius: 18px; }
+      .client-panel-head { align-items: start; flex-direction: column; gap: 7px; }
+      .client-names { gap: 8px; padding-top: 16px; }
+      .client-name { gap: 8px; min-height: 62px; padding: 10px; font-size: .78rem; }
+      .client-symbol { width: 27px; height: 27px; font-size: .65rem; }
+      .client-caveat { font-size: .68rem; }
+      .scenario-wrap { margin-top: 52px; padding-top: 27px; }
+      .scenario-grid { grid-template-columns: 1fr; gap: 9px; }
+      .scenario { padding: 15px; }
+      .contact { padding-block: 65px; }
+      .contact-shell { gap: 27px; padding: 24px 19px; border-radius: 21px; }
+      .contact h2 { font-size: clamp(1.85rem,8vw,2.5rem); }
+      .contact-copy { font-size: .9rem; }
+      .contact-aside { padding: 19px; border-radius: 16px; }
+      .contact-aside-top { gap: 10px; }
+      .contact-round-icon { width: 40px; height: 40px; }
+      .contact-socials { gap: 8px; }
+      .contact-social-link { flex: 1 1 calc(33.333% - 8px); justify-content: center; padding-inline: 8px; }
+      .contact-form-cta { align-items: flex-start; flex-direction: column; gap: 12px; }
+      .contact .btn { width: 100%; white-space: normal; }
+      .footer-main { gap: 32px; padding-block: 40px 31px; }
+      .footer-nav-wrap { gap: 37px; }
+      .footer-bottom { align-items: flex-start; flex-direction: column; gap: 12px; line-height: 1.7; }
+    }
+    @media (max-width: 370px) {
+      .container-wide { width: calc(100% - 28px); }
+      .brand { gap: 8px; }
+      .brand-name { font-size: .8rem; }
+      .hero h1 { font-size: 2.18rem; }
+      .dash-body { grid-template-columns: 71px minmax(0,1fr); }
+      .side-item { font-size: .53rem; }
+      .product-card { grid-template-columns: minmax(0,1fr) 86px; padding-inline: 15px; }
+      .product-visual { transform: scale(.65); margin-left: -25px; }
+      .client-name { font-size: .71rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      .js-motion .reveal { opacity: 1; transform: none; }
+      .typing-caret { animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-4 focus:py-3 focus:text-blue-700 focus:shadow-lg">跳至主要內容</a>
+  <header class="site-header" id="site-header">
+    <div class="container-wide nav-inner">
+      <a class="brand" href="#home" aria-label="狀態網際網路首頁">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span><span class="brand-name">狀態網際網路</span><span class="brand-sub">STATUS INTERNET CO., LTD.</span></span>
+      </a>
+      <nav class="desktop-nav" aria-label="主要導覽">
+        <a class="nav-link" href="#about">關於我們</a>
+        <a class="nav-link" href="#products">產品服務</a>
+        <a class="nav-link" href="#advantages">核心優勢</a>
+        <a class="nav-link" href="#services">技術服務</a>
+        <a class="nav-link" href="#industries">產業實績</a>
+        <a class="nav-link" href="#contact">聯絡我們</a>
+      </nav>
+      <a class="btn btn-primary nav-cta desktop-nav-cta" href="https://calendar.app.google/7YEFEk9GmYYzGcev8" target="_blank" rel="noopener noreferrer">預約諮詢 <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="開啟導覽選單" aria-expanded="false" aria-controls="mobile-menu">
+        <svg id="menu-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </header>
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+    <nav aria-label="手機版導覽">
+      <a class="nav-link" href="#about">關於我們</a>
+      <a class="nav-link" href="#products">產品服務</a>
+      <a class="nav-link" href="#advantages">核心優勢</a>
+      <a class="nav-link" href="#services">技術服務</a>
+      <a class="nav-link" href="#industries">產業實績</a>
+      <a class="nav-link" href="#contact">聯絡我們</a>
+    </nav>
+    <a class="btn btn-primary mobile-cta" href="https://calendar.app.google/7YEFEk9GmYYzGcev8" target="_blank" rel="noopener noreferrer">預約技術諮詢 <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  </div>
+
+  <main id="main-content">
+    <!-- 01 / Hero -->
+    <section class="hero" id="home" aria-labelledby="hero-title">
+      <canvas id="hero-network" aria-hidden="true"></canvas>
+      <div class="container-wide">
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>企業管理系統・流程自動化・技術整合</div>
+            <h1 id="hero-title"><span class="sr-only">讓技術落地，讓轉型真正發生</span><span class="headline-gradient" id="typed-headline" aria-hidden="true">讓技術落地，讓轉型真正發生</span><span class="typing-caret" id="typing-caret" aria-hidden="true"></span></h1>
+            <p class="hero-lead">以成熟的軟體研發與導入實務，串聯企業流程、資訊與協作，協助企業及政府機關將數位化真正融入日常營運。</p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="https://calendar.app.google/7YEFEk9GmYYzGcev8" target="_blank" rel="noopener noreferrer">預約技術諮詢 <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="btn-status">Status: Ready to Connect</span></a>
+              <a class="btn btn-secondary" href="#products">探索產品服務 <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14m-6-6 6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            </div>
+            <div class="hero-trust" aria-label="服務重點"><span><i class="check-small" aria-hidden="true">✓</i>自主研發 Power 系列</span><span><i class="check-small" aria-hidden="true">✓</i>雲端與地端部署</span><span><i class="check-small" aria-hidden="true">✓</i>顧問導入與技術支援</span></div>
+          </div>
+          <div class="hero-visual reveal" aria-label="企業流程與資訊整合介面示意圖">
+            <div class="visual-glow" aria-hidden="true"></div>
+            <div class="floating-note note-one" aria-hidden="true"><span class="floating-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M7 3.8h7l4 4V20H7a2 2 0 0 1-2-2V5.8a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.6"/><path d="M14 4v4h4M8.5 12h7M8.5 15.5h7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span><strong>表單流程管理</strong><small>Form &amp; Workflow</small></span></div>
+            <div class="dashboard">
+              <div class="dash-top"><div class="dash-title"><span class="dash-logo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 7h5v5H5zM14 7h5v5h-5zM9.5 15h5v5h-5z" stroke="currentColor" stroke-width="1.6"/><path d="M10 9.5h4M16.5 12v1.5H12" stroke="currentColor" stroke-width="1.6"/></svg></span>企業營運工作台</div><div class="dash-dots" aria-hidden="true"><i></i><i></i><i></i></div></div>
+              <div class="dash-body">
+                <aside class="dash-side" aria-hidden="true"><p class="side-label">WORKSPACE</p><div class="side-item active"><i class="side-ico"></i>總覽</div><div class="side-item"><i class="side-ico"></i>簽核流程</div><div class="side-item"><i class="side-ico"></i>文件管理</div><div class="side-item"><i class="side-ico"></i>工作協作</div><div class="side-item"><i class="side-ico"></i>系統設定</div></aside>
+                <div class="dash-main">
+                  <div class="dash-greeting">WORKSPACE OVERVIEW</div><h3>讓工作流程更有條理</h3>
+                  <div class="mini-stats">
+                    <div class="mini-stat"><div class="mini-stat-head">待處理事項 <span class="stat-bubble">↗</span></div><strong>流程</strong><small>有序推進每個節點</small></div>
+                    <div class="mini-stat"><div class="mini-stat-head">資訊整合 <span class="stat-bubble">⌘</span></div><strong>協作</strong><small>串聯日常工作資訊</small></div>
+                  </div>
+                  <div class="workflow-panel"><div class="workflow-head">流程節點示意 <span class="flow-status">流程追蹤</span></div><div class="workflow-line"><div class="flow-node done"><span class="flow-node-icon">✓</span><span>提出申請</span></div><span class="flow-connector"></span><div class="flow-node current"><span class="flow-node-icon">◎</span><span>主管簽核</span></div><span class="flow-connector"></span><div class="flow-node"><span class="flow-node-icon">▤</span><span>完成歸檔</span></div></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="floating-note note-two" aria-hidden="true"><span class="floating-icon" style="color:#11876c;background:#e7faf3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><strong>資訊有序串聯</strong><small>Connected Workflows</small></span></div>
+          </div>
+        </div>
+        <div class="hero-bottom"><span class="hero-bottom-label">POWER SERIES SOLUTIONS</span><div class="product-wordmarks" aria-label="Power 系列產品"><span class="product-wordmark"><i class="wordmark-dot"></i><span><b>Power</b>BPM</span></span><span class="product-wordmark"><i class="wordmark-dot"></i><span><b>Power</b>EIP</span></span><span class="product-wordmark"><i class="wordmark-dot"></i><span><b>Power</b>ISO</span></span><span class="product-wordmark"><i class="wordmark-dot"></i><span><b>Power</b>HR</span></span></div></div>
+      </div>
+    </section>
+
+    <!-- 02 / About -->
+    <section class="about section-pad" id="about" aria-labelledby="about-title">
+      <div class="container-wide about-grid">
+        <div class="about-left reveal">
+          <span class="section-kicker">About Status</span>
+          <h2 class="section-title" id="about-title">以軟體創新驅動企業數位化，打造高效、可靠的管理與協作環境。</h2>
+          <p class="section-desc">從企業日常作業出發，將管理制度、流程規則與資訊工具整合在一起，讓系統真正成為組織運作的一部分。</p>
+          <div class="about-manifesto">狀態網際網路，以專業研發為基礎，以客戶需求為核心，持續創造值得信賴的企業數位化解決方案。</div>
+          <div class="about-years"><strong>1996</strong><span>成立年份<br>持續深耕企業資訊系統研發與應用</span></div>
+        </div>
+        <div class="about-points">
+          <article class="about-point reveal"><div class="point-number">01</div><div><h3>深耕企業資訊系統，累積研發與應用經驗</h3><p>狀態網際網路股份有限公司成立於 1996 年，長期專注於企業資訊系統的研發與應用，協助企業及政府機關推動行政作業電子化、流程自動化與組織管理數位化。</p></div></article>
+          <article class="about-point reveal reveal-delay-1"><div class="point-number">02</div><div><h3>自主研發 Power 系列，整合多元管理需求</h3><p>產品涵蓋 PowerBPM、PowerEIP、PowerISO 與 PowerHR，從電子表單、線上簽核、內部資訊整合到文件與差勤管理，支援企業日常作業與跨部門協作。</p><div class="product-strip"><div class="strip-item"><span class="wordmark-dot"></span><span>PowerBPM</span></div><div class="strip-item"><span class="wordmark-dot"></span><span>PowerEIP</span></div><div class="strip-item"><span class="wordmark-dot"></span><span>PowerISO</span></div><div class="strip-item"><span class="wordmark-dot"></span><span>PowerHR</span></div></div></div></article>
+          <article class="about-point reveal reveal-delay-2"><div class="point-number">03</div><div><h3>理解多元產業，回應組織實務需求</h3><p>服務經驗涵蓋金融、醫療生技、教育學習、餐飲娛樂、資訊科技、電子工業及營造等領域，持續深化對不同組織管理與資訊應用需求的理解。</p></div></article>
+          <article class="about-point reveal"><div class="point-number">04</div><div><h3>兼顧部署彈性與長期維運</h3><p>依據組織的資訊環境、資安要求與管理需求，提供雲端及地端等部署選擇，持續優化產品應用，陪伴客戶穩健推動數位化。</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 / Products -->
+    <section class="products section-pad" id="products" aria-labelledby="products-title">
+      <div class="container-wide">
+        <div class="section-head-row reveal"><div><span class="section-kicker">Products &amp; Solutions</span><h2 class="section-title" id="products-title">以 Power 系列產品，<br class="hidden sm:block">串聯企業管理與日常作業。</h2></div><p class="section-desc">依照不同的管理情境，透過流程、資訊、文件與人事差勤系統，建立更有條理的數位工作環境。</p></div>
+        <div class="product-grid">
+          <article class="product-card bpm reveal"><div><div class="product-overline">01 / WORKFLOW</div><h3>PowerBPM</h3><div class="product-type">企業流程管理系統</div><p>協助企業推動電子表單、線上簽核與流程管理，將日常作業轉化為有規則、可追蹤的數位化流程。</p><a class="text-link" href="#services">了解導入服務 <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div><div class="product-visual" aria-hidden="true"><div class="visual-bpm"><div class="mock-top"><i></i><i></i><i></i></div><div class="mock-line short"></div><div class="mock-field"></div><div class="mock-line"></div><div class="mock-field"></div><div class="mock-sign"><i></i><i></i><i></i></div><span class="float-chip">BPM</span></div></div></article>
+          <article class="product-card eip reveal reveal-delay-1"><div><div class="product-overline">02 / WORKSPACE</div><h3>PowerEIP</h3><div class="product-type">企業資訊入口平台</div><p>整合企業內部資訊與日常協作功能，協助員工取得所需資訊，支援組織溝通及工作協作。</p><a class="text-link" href="#services">了解導入服務 <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div><div class="product-visual" aria-hidden="true"><div class="visual-eip"><div class="eip-head"><span>MY WORKSPACE</span><span>•••</span></div><div class="eip-grid"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="eip-task"></div><div class="eip-task"></div><span class="float-chip">EIP</span></div></div></article>
+          <article class="product-card iso reveal"><div><div class="product-overline">03 / DOCUMENT</div><h3>PowerISO</h3><div class="product-type">ISO 文件管理系統</div><p>協助組織進行 ISO 相關文件管理，支援文件管理作業數位化，讓文件資訊更有系統。</p><a class="text-link" href="#services">了解導入服務 <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div><div class="product-visual" aria-hidden="true"><div class="visual-iso"><div class="iso-sheet back"></div><div class="iso-sheet front"><div class="iso-seal">ISO</div><div class="iso-line"></div><div class="iso-line"></div><div class="iso-line" style="width:70%"></div><div class="iso-line"></div></div><span class="float-chip">DOC</span></div></div></article>
+          <article class="product-card hr reveal reveal-delay-1"><div><div class="product-overline">04 / PEOPLE</div><h3>PowerHR</h3><div class="product-type">人事差勤管理系統</div><p>提供人事與差勤管理相關的系統應用，支援企業日常人事管理與差勤作業。</p><a class="text-link" href="#services">了解導入服務 <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div><div class="product-visual" aria-hidden="true"><div class="visual-hr"><div class="hr-month"><span>ATTENDANCE</span><span>›</span></div><div class="calendar-grid"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span></div><span class="hr-person">HR</span></div></div></article>
+        </div>
+        <div class="product-bottom-note reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 11v5m0-8h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>產品實際功能與導入範圍，將依組織需求、系統環境及專案評估結果進一步討論。</span></div>
+      </div>
+    </section>
+
+    <!-- 04 / Advantages -->
+    <section class="advantages section-pad" id="advantages" aria-labelledby="advantages-title">
+      <div class="container-wide advantages-layout">
+        <div class="reveal"><span class="section-kicker">Business Value</span><h2 class="section-title" id="advantages-title">不只提供系統，<br>更重視企業實際的使用需求。</h2><p class="section-desc">從作業流程到資訊環境，理解企業每天面對的管理情境，讓數位工具與既有工作方式有效銜接。</p><div class="advantage-note"><strong>以實際情境為起點，規劃適合的導入方式</strong><p>依照組織流程、使用者角色及資訊架構，評估適合的產品組合與整合方向，而不是以單一模式套用所有需求。</p></div></div>
+        <div>
+          <div class="architecture reveal" aria-label="企業管理系統整合示意圖"><div class="arch-label">CONNECTED ENTERPRISE</div><div class="arch-core"><span class="arch-core-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7.5 12 3l8 4.5v9L12 21l-8-4.5v-9Z" stroke="currentColor" stroke-width="1.5"/><path d="m4.5 7.7 7.5 4.4 7.5-4.4M12 12v8.4" stroke="currentColor" stroke-width="1.5"/></svg></span><span><strong>企業管理與資訊整合</strong><span>People · Process · Information</span></span></div><div class="arch-connector" aria-hidden="true"></div><div class="arch-nodes"><div class="arch-node"><span class="arch-node-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 8h8M8 12h8M8 16h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span><strong>流程電子化</strong><span>表單與簽核歷程</span></span></div><div class="arch-node"><span class="arch-node-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M3 9h18M8 4v5m8-5v5" stroke="currentColor" stroke-width="1.5"/></svg></span><span><strong>資訊與工作協作</strong><span>內部資訊與日常任務</span></span></div><div class="arch-node"><span class="arch-node-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 3h8l4 4v14H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.5"/><path d="M14 3v5h5M8 12h7M8 16h7" stroke="currentColor" stroke-width="1.5"/></svg></span><span><strong>文件與制度管理</strong><span>文件管理相關作業</span></span></div><div class="arch-node"><span class="arch-node-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 20v-1.5A4.5 4.5 0 0 1 8 14h2a4.5 4.5 0 0 1 4.5 4.5V20M16 5.5a3 3 0 0 1 0 5.8M17 14h.5a3.5 3.5 0 0 1 3 3.3V20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span><strong>人事與差勤管理</strong><span>日常人事管理應用</span></span></div></div></div>
+          <div class="value-list">
+            <article class="value-item reveal"><span class="value-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 3h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.6"/><path d="m8 12 2.5 2.5L16 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><h3>流程電子化與線上簽核</h3><p>將日常行政作業轉為有規則的數位流程，支援簽核歷程追蹤與流程管理。</p></div></article>
+            <article class="value-item reveal reveal-delay-1"><span class="value-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="3" stroke="currentColor" stroke-width="1.6"/><circle cx="17" cy="17" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M9.5 9.5 14.5 14.5M15 5h4v4M5 15v4h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><h3>企業資訊整合與內部協作</h3><p>串聯內部資訊與日常工作資訊，協助團隊取得所需內容並支援工作協作。</p></div></article>
+            <article class="value-item reveal reveal-delay-2"><span class="value-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 3h8l4 4v14H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.6"/><path d="M14 3v5h5M8 12h7M8 16h7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><div><h3>文件與管理作業數位化</h3><p>透過文件、人事及差勤相關產品，支援企業不同面向的日常管理需求。</p></div></article>
+            <article class="value-item reveal"><span class="value-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 21h8m-4-4v4M7 9h4m-4 3h7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><div><h3>彈性部署與技術整合</h3><p>依企業資訊環境與管理需求，評估雲端或地端部署方式，以及帳號驗證和外部系統串接方向。</p></div></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 / Services -->
+    <section class="services section-pad" id="services" aria-labelledby="services-title">
+      <div class="container-wide">
+        <div class="services-top reveal"><div><span class="section-kicker">Consulting &amp; Technical Services</span><h2 class="section-title" id="services-title">以專業顧問與技術整合，<br class="hidden sm:block">賦能企業加速數位轉型。</h2></div><p class="section-desc">從導入前的需求梳理，到系統設定、技術整合與使用者培訓，協助企業讓系統貼近日常工作並建立持續運用的能力。</p></div>
+        <div class="service-grid">
+          <article class="service-card reveal"><div class="service-card-top"><span class="service-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.6"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0M18 3.5l2.5 2.5M20.5 3.5 18 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="service-index">SERVICE 01</span></div><h3>系統顧問與導入規劃</h3><p>依據組織架構、作業需求與資訊環境，協助釐清導入方向及合適的系統應用方式。</p></article>
+          <article class="service-card reveal reveal-delay-1"><div class="service-card-top"><span class="service-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 8h8M8 12h5M8 16h3m5-4 2 2 3-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="service-index">SERVICE 02</span></div><h3>BPM 表單與流程設計</h3><p>協助規劃電子表單、流程條件與簽核作業，讓系統設定回應實際業務規則。</p></article>
+          <article class="service-card reveal reveal-delay-2"><div class="service-card-top"><span class="service-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="service-index">SERVICE 03</span></div><h3>AD 帳號整合與單一登入（SSO）</h3><p>協助既有帳號驗證環境與相關系統整合，減少使用者跨系統登入的不便。</p></article>
+          <article class="service-card reveal"><div class="service-card-top"><span class="service-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="13" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M10 7.5h3a2 2 0 0 1 2 2v3.5M14 16.5h-3a2 2 0 0 1-2-2V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="service-index">SERVICE 04</span></div><h3>外部系統串接</h3><p>依據實際需求，評估既有企業系統與管理系統的整合方式及技術可行性。</p></article>
+          <article class="service-card reveal reveal-delay-1"><div class="service-card-top"><span class="service-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 21h8m-4-4v4M7 8h10m-10 4h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="service-index">SERVICE 05</span></div><h3>雲端與地端部署</h3><p>依據資訊環境、部署偏好及管理需求，討論適合的系統部署選擇。</p></article>
+          <article class="service-card reveal reveal-delay-2"><div class="service-card-top"><span class="service-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21V5.5Z" stroke="currentColor" stroke-width="1.6"/><path d="M4 6h12M8 10h8M8 13h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="service-index">SERVICE 06</span></div><h3>教育訓練與技術支援</h3><p>透過系統操作、表單設計與流程管理訓練，以及 LINE 客服管道，協助客戶處理日常使用問題。</p></article>
+        </div>
+        <div class="services-footer reveal"><div><strong>正在評估導入或系統整合方向？</strong><p>從目前的作業流程與技術環境談起，一起釐清需求與可行方向。</p></div><a class="btn btn-primary" href="https://calendar.app.google/7YEFEk9GmYYzGcev8" target="_blank" rel="noopener noreferrer">預約技術諮詢 <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+      </div>
+    </section>
+
+    <!-- 06 / Industries and clients -->
+    <section class="industries section-pad" id="industries" aria-labelledby="industries-title">
+      <div class="container-wide">
+        <div class="industry-layout">
+          <div class="reveal"><span class="section-kicker">Industry Experience</span><h2 class="section-title" id="industries-title">累積跨產業經驗，理解不同組織的管理需求。</h2><p class="section-desc">不同產業有各自的管理流程與資訊環境。透過多元領域的服務經驗，理解企業在日常營運中面對的需求與挑戰。</p><div class="industry-tags" aria-label="服務產業"><span class="industry-tag">金融</span><span class="industry-tag">醫療生技</span><span class="industry-tag">教育學習</span><span class="industry-tag">餐飲娛樂</span><span class="industry-tag">資訊科技</span><span class="industry-tag">電子工業</span><span class="industry-tag">營造</span></div></div>
+          <div class="client-panel reveal reveal-delay-1"><div class="client-panel-head"><h3>客戶實績</h3><span>SELECTED CLIENTS</span></div><div class="client-names"><div class="client-name"><span class="client-symbol" aria-hidden="true">富</span>富邦金控</div><div class="client-name"><span class="client-symbol" aria-hidden="true">兆</span>兆豐金控</div><div class="client-name"><span class="client-symbol" aria-hidden="true">馥</span>馥蘭朵度假酒店</div><div class="client-name"><span class="client-symbol" aria-hidden="true">奇</span>奇寶網路有限公司</div><div class="client-name"><span class="client-symbol" aria-hidden="true">震</span>震旦行</div></div><p class="client-caveat">以上以客戶名稱文字呈現，未使用仿製 Logo；此處不代表特定產品、部署方式或專案成果。</p></div>
+        </div>
+        <div class="scenario-wrap reveal"><h3 class="scenario-title">常見企業應用情境</h3><div class="scenario-grid"><div class="scenario"><span class="scenario-num">01</span><p>將紙本或分散的行政申請，逐步整理為電子表單與線上簽核流程。</p></div><div class="scenario"><span class="scenario-num">02</span><p>讓內部公告、工作事項與管理資訊更容易被員工取得及使用。</p></div><div class="scenario"><span class="scenario-num">03</span><p>依據既有帳號與資訊環境，評估單一登入及外部系統整合需求。</p></div></div></div>
+      </div>
+    </section>
+
+    <!-- 07 / Core products -->
+    <section class="core-products section-pad" id="core-products" aria-labelledby="core-products-title">
+      <div class="container-wide">
+        <div class="core-products-head reveal">
+          <span class="section-kicker">Core Products</span>
+          <h2 class="section-title" id="core-products-title">以三套核心產品，<br class="hidden sm:block">打造更高效的企業運作。</h2>
+          <p class="section-desc">深入了解 PowerBPM、PowerEIP 與 PowerISO，選擇最符合企業流程、協作與文件管理需求的解決方案。</p>
+        </div>
+        <div class="core-products-grid">
+          <article class="core-product-card bpm reveal">
+            <div class="core-product-icon" aria-hidden="true"><i class="fa-solid fa-diagram-project"></i></div>
+            <h3>PowerBPM 企業流程管理系統</h3>
+            <p>彈性表單設計、電子簽核全自動，電腦手機均可操作，大幅提升行政效率。</p>
+            <a class="core-product-link" href="https://www.status.com.tw/BPMSystem" target="_blank" rel="noopener noreferrer">了解 PowerBPM <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+          </article>
+          <article class="core-product-card eip reveal reveal-delay-1">
+            <div class="core-product-icon" aria-hidden="true"><i class="fa-solid fa-table-columns"></i></div>
+            <h3>PowerEIP</h3>
+            <p>整合儀表板、公告、資源預約、文件庫、行事曆與待辦事項，單一登入口統一管理，提升企業內部協作效率。</p>
+            <a class="core-product-link" href="https://www.status.com.tw/PowerEIP" target="_blank" rel="noopener noreferrer">了解 PowerEIP <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+          </article>
+          <article class="core-product-card iso reveal reveal-delay-2">
+            <div class="core-product-icon" aria-hidden="true"><i class="fa-solid fa-file-shield"></i></div>
+            <h3>PowerISO</h3>
+            <p>全文檢索快速找文件、三層分權控管存取安全、版本控管避免誤用，稽核準備輕鬆應對。</p>
+            <a class="core-product-link" href="https://www.status.com.tw/PowerISO" target="_blank" rel="noopener noreferrer">了解 PowerISO <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 / Contact -->
+    <section class="contact" id="contact" aria-labelledby="contact-title">
+      <div class="container-wide">
+        <div class="contact-shell reveal">
+          <div><span class="section-kicker">Start a Conversation</span><h2 id="contact-title">從實際需求出發，找到合適的數位化方向。</h2><p class="contact-copy">無論正在評估流程管理、系統導入、帳號整合或外部系統串接，都歡迎預約交流。從現況與需求開始，進一步討論適合的產品應用與技術方向。</p><a class="btn btn-primary" href="https://calendar.app.google/7YEFEk9GmYYzGcev8" target="_blank" rel="noopener noreferrer">預約技術諮詢 <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="btn-status">Status: Ready to Connect</span></a></div>
+          <aside class="contact-aside"><div class="contact-aside-top"><span class="contact-round-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><strong>與我們討論您的需求</strong><span>Technical Consultation</span></div></div><div class="contact-detail"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>透過預約頁面選擇方便的時段，安排技術需求交流。</span></div><div class="contact-detail"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s7-4.5 7-11a7 7 0 1 0-14 0c0 6.5 7 11 7 11Z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="10" r="2.2" stroke="currentColor" stroke-width="1.6"/></svg><span>可討論產品應用、流程設計、帳號整合及系統串接等議題。</span></div><div class="contact-socials" aria-label="社群連結"><a class="contact-social-link line" href="https://line.me/R/ti/p/%40qgl8779e" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-line" aria-hidden="true"></i><span>LINE</span></a><a class="contact-social-link facebook" href="https://www.facebook.com/StatusTW/" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i><span>Facebook</span></a><a class="contact-social-link youtube" href="https://www.youtube.com/channel/UChrAnjSOzI1oBAAsj5dlG5Q" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-youtube" aria-hidden="true"></i><span>YouTube</span></a></div><div class="contact-form-cta"><div><strong>想更完整說明您的需求？</strong><span>填寫表單，讓我們提前了解您的需求。</span></div><a class="contact-form-link" href="https://forms.gle/5FV9Bydr3ZxSXgj68" target="_blank" rel="noopener noreferrer">填寫需求表單 <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a></div><a class="btn btn-secondary" style="width:100%;margin-top:20px" href="https://calendar.app.google/7YEFEk9GmYYzGcev8" target="_blank" rel="noopener noreferrer">開啟預約頁面 <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a><p class="contact-footnote">公司電話、電子郵件及地址尚未提供，因此此頁暫不顯示未確認的聯絡資料。</p></aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 09 / Footer -->
+  <footer class="footer">
+    <div class="container-wide footer-main">
+      <div><a class="brand" href="#home" aria-label="回到狀態網際網路首頁"><span class="brand-mark" aria-hidden="true"></span><span><span class="brand-name">狀態網際網路</span><span class="brand-sub">STATUS INTERNET CO., LTD.</span></span></a><p class="footer-desc">讓技術落地，讓轉型真正發生。以企業管理系統、流程設計與技術整合，協助企業推動日常作業數位化。</p></div>
+      <div class="footer-nav-wrap"><div class="footer-nav-col"><h3>網站導覽</h3><a href="#about">關於我們</a><a href="#products">產品與解決方案</a><a href="#advantages">核心優勢</a><a href="#services">技術服務</a></div><div class="footer-nav-col"><h3>進一步了解</h3><a href="#industries">產業經驗與客戶實績</a><a href="#contact">預約技術諮詢</a><a href="https://calendar.app.google/7YEFEk9GmYYzGcev8" target="_blank" rel="noopener noreferrer">開啟預約頁面 ↗</a></div></div>
+    </div>
+    <div class="container-wide footer-bottom"><span>© <span id="current-year">2026</span> 狀態網際網路股份有限公司. All rights reserved.</span><a class="back-top" href="#home">返回頁首 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+  </footer>
+
+  <script>
+    (() => {
+      'use strict';
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const header = document.getElementById('site-header');
+      const menuToggle = document.getElementById('menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const menuIcon = document.getElementById('menu-icon');
+      const typedHeadline = document.getElementById('typed-headline');
+      const typingCaret = document.getElementById('typing-caret');
+      const headlineText = '讓技術落地，讓轉型真正發生';
+
+      // Keep a fixed text-only H1 for SEO and assistive technology; animate its visual counterpart once.
+      if (!reducedMotion && typedHeadline) {
+        let index = 0;
+        typedHeadline.textContent = '';
+        const typeNext = () => {
+          if (index < headlineText.length) {
+            typedHeadline.textContent += headlineText.charAt(index);
+            index += 1;
+            window.setTimeout(typeNext, index < 5 ? 115 : 90);
+          } else if (typingCaret) {
+            typingCaret.style.animationIterationCount = 'infinite';
+          }
+        };
+        window.setTimeout(typeNext, 320);
+      } else if (typingCaret) {
+        typingCaret.style.display = 'none';
+      }
+
+      // Mobile navigation: toggle, close after selection, and support Escape.
+      const setMenuState = (isOpen) => {
+        mobileMenu.classList.toggle('open', isOpen);
+        mobileMenu.setAttribute('aria-hidden', String(!isOpen));
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+        menuToggle.setAttribute('aria-label', isOpen ? '關閉導覽選單' : '開啟導覽選單');
+        document.body.classList.toggle('menu-open', isOpen);
+        menuIcon.innerHTML = isOpen
+          ? '<path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'
+          : '<path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>';
+      };
+      menuToggle.addEventListener('click', () => setMenuState(menuToggle.getAttribute('aria-expanded') !== 'true'));
+      mobileMenu.querySelectorAll('a[href^="#"]').forEach((link) => {
+        link.addEventListener('click', () => setMenuState(false));
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && menuToggle.getAttribute('aria-expanded') === 'true') {
+          setMenuState(false);
+          menuToggle.focus();
+        }
+      });
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 900 && menuToggle.getAttribute('aria-expanded') === 'true') setMenuState(false);
+      });
+
+      // Header shadow after scrolling.
+      const updateHeader = () => header.classList.toggle('scrolled', window.scrollY > 12);
+      updateHeader();
+      window.addEventListener('scroll', updateHeader, { passive: true });
+
+      // Reveal sections once; content remains visible if IntersectionObserver is unavailable.
+      const revealItems = document.querySelectorAll('.reveal');
+      if (!reducedMotion && 'IntersectionObserver' in window) {
+        document.documentElement.classList.add('js-motion');
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -35px 0px' });
+        revealItems.forEach((item) => revealObserver.observe(item));
+      } else {
+        revealItems.forEach((item) => item.classList.add('is-visible'));
+      }
+
+      // Highlight the current section in the desktop and mobile navigation.
+      const sections = document.querySelectorAll('main section[id]');
+      const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+      if ('IntersectionObserver' in window) {
+        const sectionObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            navLinks.forEach((link) => {
+              const active = link.getAttribute('href') === `#${entry.target.id}`;
+              link.classList.toggle('active', active);
+              if (active) link.setAttribute('aria-current', 'location');
+              else link.removeAttribute('aria-current');
+            });
+          });
+        }, { rootMargin: '-25% 0px -60% 0px', threshold: 0 });
+        sections.forEach((section) => sectionObserver.observe(section));
+      }
+
+      // Light, low-density hero network canvas; scaling is reduced on small screens.
+      const canvas = document.getElementById('hero-network');
+      const ctx = canvas ? canvas.getContext('2d') : null;
+      if (canvas && ctx && !reducedMotion) {
+        let width = 0, height = 0, particles = [], rafId = 0;
+        let dpr = Math.min(window.devicePixelRatio || 1, 1.6);
+        const initCanvas = () => {
+          const rect = canvas.getBoundingClientRect();
+          width = Math.max(1, rect.width);
+          height = Math.max(1, rect.height);
+          dpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 640 ? 1 : 1.5);
+          canvas.width = Math.floor(width * dpr);
+          canvas.height = Math.floor(height * dpr);
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          const count = Math.max(12, Math.min(42, Math.floor(width / (window.innerWidth < 640 ? 34 : 27))));
+          particles = Array.from({ length: count }, () => ({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - .5) * .16,
+            vy: (Math.random() - .5) * .16,
+            r: Math.random() * 1.4 + .6
+          }));
+        };
+        const drawNetwork = () => {
+          ctx.clearRect(0, 0, width, height);
+          for (let i = 0; i < particles.length; i += 1) {
+            const p = particles[i];
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0 || p.x > width) p.vx *= -1;
+            if (p.y < 0 || p.y > height) p.vy *= -1;
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(83, 124, 211, .48)'; ctx.fill();
+            for (let j = i + 1; j < particles.length; j += 1) {
+              const q = particles[j];
+              const dx = p.x - q.x, dy = p.y - q.y;
+              const distance = Math.sqrt(dx * dx + dy * dy);
+              const maxDistance = window.innerWidth < 640 ? 82 : 125;
+              if (distance < maxDistance) {
+                ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y);
+                ctx.strokeStyle = `rgba(100, 136, 213, ${(1 - distance / maxDistance) * .2})`;
+                ctx.lineWidth = .7; ctx.stroke();
+              }
+            }
+          }
+          rafId = window.requestAnimationFrame(drawNetwork);
+        };
+        initCanvas();
+        rafId = window.requestAnimationFrame(drawNetwork);
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+          window.clearTimeout(resizeTimer);
+          resizeTimer = window.setTimeout(() => { window.cancelAnimationFrame(rafId); initCanvas(); rafId = window.requestAnimationFrame(drawNetwork); }, 180);
+        }, { passive: true });
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) window.cancelAnimationFrame(rafId);
+          else if (!reducedMotion) rafId = window.requestAnimationFrame(drawNetwork);
+        });
+      }
+
+      document.getElementById('current-year').textContent = String(new Date().getFullYear());
+    })();
+  </script>
+</body>
+</html>
